@@ -1,7 +1,10 @@
-[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-24ddc0f5d75046c5622901739e7c5dd533143b0c8e959d652212380cedb1ea36.svg)](https://classroom.github.com/a/xHnRfY9D)
-# Django Practice Assessment
+# CS 3240 Group B-05 Geocaching App
 
-__Name:__
-
-__Computing ID:__
+Members:
+* Alip Arslan (aa8pss)
+* Emma Mei Andreas (ema2se)
+* Varun Varma (kgy6hy)
+* Asmita Kadam (qkn2ua)
+* Ethan Christian (vya9tu)
+* Jasmine Singh (zsf4ee)
 
