@@ -29,7 +29,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = [
     "localhost",
-    "https://b-05-geocaching-64269dc11cdf.herokuapp.com",
+    "b-05-geocaching-64269dc11cdf.herokuapp.com",
 ]
 
 
