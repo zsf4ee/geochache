@@ -8,4 +8,4 @@ def home(request):
 
 def logout_view(request):
     logout(request)
-    return redirect("/")
+    return render(request, "logout.html")
