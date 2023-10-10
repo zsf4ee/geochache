@@ -4,4 +4,3 @@ gunicorn
 django-heroku
 dj-database-url
 django-allauth
-django-allauth

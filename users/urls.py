@@ -4,5 +4,5 @@ from . import views
 urlpatterns = [
     path('', views.home, name="home"),
     path('logout', views.logout_view, name = "logout"),
-    path('add', views.add, name = "add")
+    path('add', views.geocache_add, name = "add")
 ]
