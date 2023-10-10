@@ -6,6 +6,9 @@
 
 {% load socialaccount %}
 <h2>Google Login</h2>
+<div>
+    <a href="{% url 'add' %}">New GeoCache</a>
+</div>
 <a href="{% provider_login_url 'google' %}?next=/">Login with Google</a>
 
 {% if user.is_authenticated%}
