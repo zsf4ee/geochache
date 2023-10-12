@@ -18,10 +18,11 @@ class Geocache(models.Model):
     lng = models.DecimalField( max_digits=11, decimal_places=8)
     description = models.CharField(max_length=500)
     hint = models.CharField(max_length=150, null=True, blank=True)
+    radius = models.IntegerField(null=True)
 
 
     def __str__(self):
-        return self.cacher.first_name + " " + self.cacher.last_name + "[" + self.description + "] : " + str(self.find_count)
+        return self.cacher.first_name + " " + self.cacher.last_name + "[" + self.name + "] : " + str(self.find_count)
 
 # Holds data for one instance of geocache being found
 class Find(models.Model):

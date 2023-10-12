@@ -63,6 +63,7 @@
         }
 
         document.getElementById('id_location').value = location.lat() + ',' + location.lng();
+        document.getElementById('id_radius').value =  marker.getRadius();
     }
 
     function update_marker() {
@@ -84,7 +85,9 @@
             {{ form.hint.label_tag }} {{ form.hint }}
             <br>
             {{ form.location }}
-            <input id="slide" type="range" min="1" max="100" value="50">
+            <br>
+            {{ form.radius }}
+            <input id="slide" type="range" min="1" max="200" value="50">
             <div id="map" style="height: 500px; width: 60%; align-self: center;"></div>
             <br>
             <button type="submit">Submit</button>
