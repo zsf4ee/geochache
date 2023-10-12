@@ -107,12 +107,11 @@ SOCIALACCOUNT_PROVIDERS = {
 # if os.getenv("IS_PRODUCTION") != None:
 if True:
     DATABASES = {
-        "default": dj_database_url.config(
-            conn_max_age=600,
-            conn_health_checks=True,
-            ssl_require=True,
-        )
+    "default": {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": "mydatabase",
     }
+}
 else:
     DATABASES = {
         "defaultINE": "django.db.backends.sqlite3",

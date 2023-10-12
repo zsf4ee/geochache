@@ -1,9 +1,93 @@
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBBZRxuya4tR7SFOmf2dHAMikvaxEGP_OY"></script>
+<script>
+    var map;
+    var marker;
+    var inner_marker;
+    var inner_inner_marker;
 
-<div >
-    <form method="post">
-        {% csrf_token %}
-        {% bootstrap_form form %}
-        <button type="submit" class="btn btn-primary">Submit</button>
-    </form>
-</div>
+    function initMap() {
+        var center = { lat: 38.0336, lng: -78.5080 };
 
+        map = new google.maps.Map(document.getElementById('map'), {
+            zoom: 18,
+            center: center
+        });
+
+        google.maps.event.addListener(map, 'click', function (event) {
+            placeMarker(event.latLng);
+        });
+
+        document.getElementById('slide').addEventListener('input', function () {
+            update_marker();
+        });
+    }
+
+    function placeMarker(location) {
+        if (marker) {
+            marker.setCenter(location)
+            inner_marker.setCenter(location)
+            inner_inner_marker.setCenter(location)
+        } else {
+            marker = new google.maps.Circle({
+                strokeColor: '#097969',
+                strokeOpacity: 0.8,
+                strokeWeight: 2,
+                fillColor: '#023020',
+                fillOpacity: 0.35,
+                map: map,
+                center: location,
+                radius: parseInt(document.getElementById('slide').value)
+            });
+
+            inner_marker = new google.maps.Circle({
+                strokeColor: '#0BDA51',
+                strokeOpacity: 0.8,
+                strokeWeight: 2,
+                fillColor: '#00A36C',
+                fillOpacity: 0.35,
+                map: map,
+                center: location,
+                radius: marker.radius/1.5
+            });
+
+            inner_inner_marker = new google.maps.Circle({
+                strokeColor: '#AFE1AF',
+                strokeOpacity: 0.8,
+                strokeWeight: 2,
+                fillColor: '#4F7942',
+                fillOpacity: 0.35,
+                map: map,
+                center: location,
+                radius: marker.radius/3
+            });
+        }
+
+        document.getElementById('id_location').value = location.lat() + ',' + location.lng();
+    }
+
+    function update_marker() {
+        marker.setRadius(parseInt(document.getElementById('slide').value))
+        inner_marker.setRadius(parseInt(document.getElementById('slide').value)/1.5)
+        inner_inner_marker.setRadius(parseInt(document.getElementById('slide').value)/3)
+    }
+</script>
+
+
+<body onload="initMap()">
+    <div style="align-self: center;">
+        <form method="post">
+            {% csrf_token %}
+            {{ form.name.label_tag }} {{ form.name }}
+            <br>
+            {{ form.description.label_tag }} {{ form.description }}
+            <br>
+            {{ form.hint.label_tag }} {{ form.hint }}
+            <br>
+            {{ form.location }}
+            <input id="slide" type="range" min="1" max="100" value="50">
+            <div id="map" style="height: 500px; width: 60%; align-self: center;"></div>
+            <br>
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+</body>

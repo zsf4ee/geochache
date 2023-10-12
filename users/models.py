@@ -21,7 +21,7 @@ class Geocache(models.Model):
 
 
     def __str__(self):
-        return self.cacher.first_name + " " + self.cacher.last_name +  " : " + self.find_count
+        return self.cacher.first_name + " " + self.cacher.last_name + "[" + self.description + "] : " + str(self.find_count)
 
 # Holds data for one instance of geocache being found
 class Find(models.Model):
@@ -30,7 +30,7 @@ class Find(models.Model):
     timestamp = models.DateTimeField()
 
     def __str__(self):
-        return self.finder.first_name + " " + self.finder.last_name + " : " + self.timestamp
+        return self.finder.first_name + " " + self.finder.last_name + " : " + str(self.timestamp)
 
 
 class Comment(models.Model):

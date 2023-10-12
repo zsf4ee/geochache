@@ -4,6 +4,7 @@ class GeoCacheForm(forms.Form):
     name = forms.CharField(label='Name', max_length=50)
     description = forms.CharField(label='Description', max_length=350)
     hint = forms.CharField(label='Hint(Optional)', max_length=150, required=False)
+    location = forms.CharField(widget=forms.HiddenInput())
 
 class CommentForm(forms.Form):
     text = forms.CharField(label='Comment', max_length=255)
