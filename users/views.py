@@ -50,7 +50,7 @@ def geocaches_within_bounds(request):
         lat__gte=sw_lat,
         lng__lte=ne_lng,
         lng__gte=sw_lng
-    ).values('lat', 'lng')
+    ).values('lat', 'lng','radius')
 
     if(geocaches.exists()):
         return JsonResponse(list(geocaches), safe=False)

@@ -1,3 +1,8 @@
+{% load bootstrap5 %}
+
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBBZRxuya4tR7SFOmf2dHAMikvaxEGP_OY"></script>
 <script>
     var map;
@@ -88,6 +93,7 @@
             {{ form.location }}
             <br>
             {{ form.radius }}
+            <label>Radius:</label>
             <input id="slide" type="range" min="1" max="200" value="50">
             <div id="map" style="height: 500px; width: 60%; align-self: center;"></div>
             <br>

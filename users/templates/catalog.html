@@ -33,7 +33,7 @@
             })
             .then(data => {
                 data.forEach(geocache => {
-                    placeMarker({ lat: +geocache.lat, lng: +geocache.lng });
+                    placeMarker({ lat: +geocache.lat, lng: +geocache.lng }, +geocache.radius);
                 });
             })
             .catch(error => {
@@ -42,18 +42,41 @@
     }
 
 
-    function placeMarker(location) {
+    function placeMarker(location, radius) {
         var marker;
-    
-        marker = new google.maps.Marker({
+
+        if(radius <= 50){
+            marker = new google.maps.Marker({
              position: location,
              map,
              icon : {
-                url: "/static/images/marker.png",
+                url: "/static/images/marker_green.png",
                 scaledSize: new google.maps.Size(40,25)
             }
-            });
-
+            }); 
+        }
+        else if(radius <= 150){
+            marker = new google.maps.Marker({
+             position: location,
+             map,
+             icon : {
+                url: "/static/images/marker_yellow.png",
+                scaledSize: new google.maps.Size(40,25)
+            }
+            }); 
+        }
+        else{
+            marker = new google.maps.Marker({
+             position: location,
+             map,
+             icon : {
+                url: "/static/images/marker_red.png",
+                scaledSize: new google.maps.Size(40,25)
+            }
+            }); 
+        }
+    
+        
         marker.addListener('click', function (event) {
             window.location.href = `${cacheUrl}?lat=${location.lat}&lng=${location.lng}`
         });
