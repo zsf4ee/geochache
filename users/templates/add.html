@@ -10,8 +10,9 @@
 
         map = new google.maps.Map(document.getElementById('map'), {
             zoom: 18,
-            center: center
+            center: center,
         });
+
 
         google.maps.event.addListener(map, 'click', function (event) {
             placeMarker(event.latLng);

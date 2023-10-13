@@ -5,11 +5,17 @@
 {% block content %}
 
 {% load socialaccount %}
+{% load bootstrap5 %}
+
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+
 <h2>Google Login</h2>
 <div>
-    <a href="{% url 'add' %}">New GeoCache</a>
+    <a class="btn btn-primary" href="{% url 'add' %}">New GeoCache</a>
+    <a class="btn btn-primary" href="{% url 'catalog' %}">Cache Center</a>
 </div>
-<a href="{% provider_login_url 'google' %}?next=/">Login with Google</a>
+<a class="btn btn-secondary" href="{% provider_login_url 'google' %}?next=/">Login with Google</a>
 
 {% if user.is_authenticated%}
     <p>You are signed in as {{user.email}}.<br>

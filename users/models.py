@@ -22,7 +22,7 @@ class Geocache(models.Model):
 
 
     def __str__(self):
-        return self.cacher.first_name + " " + self.cacher.last_name + "[" + self.name + "] : " + str(self.find_count)
+        return self.cacher.first_name + " " + self.cacher.last_name + "[" + self.name + "] : " + str(self.find_count) + " " + str(self.id)
 
 # Holds data for one instance of geocache being found
 class Find(models.Model):
@@ -35,6 +35,7 @@ class Find(models.Model):
 
 
 class Comment(models.Model):
+    geocache = models.ForeignKey(Geocache, on_delete= models.CASCADE,null=True)
     user = models.ForeignKey(User, on_delete= models.CASCADE)
     text = models.CharField(max_length=255)
     date = models.DateTimeField()

@@ -1,0 +1,88 @@
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBBZRxuya4tR7SFOmf2dHAMikvaxEGP_OY"></script>
+<script>
+    var map;
+    var lat = "{{ geocache.lat }}"
+    var lng = "{{ geocache.lng }}"
+    var radius = "{{ geocache.radius }}"
+
+
+    function initMap() {
+        var marker;
+        var inner_marker;
+        var inner_inner_marker;
+
+        map = new google.maps.Map(document.getElementById('map'), {
+            zoom: 15,
+            center: { lat: +lat, lng: +lng },
+            scrollwheel: false,
+            draggable: false
+        });
+
+        console.log(radius);
+        console.log(typeof radius);
+
+        marker = new google.maps.Circle({
+            strokeColor: '#097969',
+            strokeOpacity: 0.8,
+            strokeWeight: 2,
+            fillColor: '#023020',
+            fillOpacity: 0.35,
+            map: map,
+            center: { lat: +lat, lng: +lng },
+            radius: parseInt(radius)
+        });
+
+        inner_marker = new google.maps.Circle({
+            strokeColor: '#0BDA51',
+            strokeOpacity: 0.8,
+            strokeWeight: 2,
+            fillColor: '#00A36C',
+            fillOpacity: 0.35,
+            map: map,
+            center: { lat: +lat, lng: +lng },
+            radius: marker.radius / 1.5
+        });
+
+        inner_inner_marker = new google.maps.Circle({
+            strokeColor: '#AFE1AF',
+            strokeOpacity: 0.8,
+            strokeWeight: 2,
+            fillColor: '#4F7942',
+            fillOpacity: 0.35,
+            map: map,
+            center: { lat: +lat, lng: +lng },
+            radius: marker.radius / 3
+        });
+
+    }
+
+
+</script>
+
+<body onload="initMap()">
+    <div>
+        <div>
+            <h1>{{ geocache.name }}</h1>
+            <p>Placed by: {{ geocache.cacher.first_name }} {{ geocache.cacher.last_name }}</p>
+            <p>Description: {{ geocache.description }}</p>
+            <p>Hint: {{ geocache.hint }}</p>
+            <p>Found {{ geocache.find_count }} times</p>
+            <div id="map" style="height: 500px; width: 60%; align-self: center;"></div>
+            <h2>Finds</h2>
+            <ul>
+                {% for find in finds %}
+                <li>{{ find.finder.first_name }} {{ find.finder.last_name }} on {{ find.timestamp }}</li>
+                {% endfor %}
+            </ul>
+
+            <h2>Comments</h2>
+            <ul>
+                {% for comment in comments %}
+                <li>{{ comment.user.first_name }} {{ comment.user.last_name }} ({{ comment.date }}): {{ comment.text }}
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+
+    </div>
+</body>
