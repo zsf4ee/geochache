@@ -2,29 +2,44 @@
 
 {% bootstrap_css %}
 {% bootstrap_javascript %}
-
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBBZRxuya4tR7SFOmf2dHAMikvaxEGP_OY"></script>
 <script>
     var map;
     var marker;
     var inner_marker;
     var inner_inner_marker;
+    var cur_lat;
+    var cur_long;
+    var center;
 
     function initMap() {
-        var center = { lat: 38.0336, lng: -78.5080 };
+        new Promise((resolve, reject) => {
+            navigator.geolocation.getCurrentPosition(function (position) {
+                cur_lat = position.coords.latitude;
+                cur_long = position.coords.longitude;
+                center = { lat: position.coords.latitude, lng: position.coords.longitude };
+                console.log("Latitude:", cur_lat, "Longitude:", cur_long);
+                resolve(); 
+            }, function (error) {
+                console.error("Error occurred while getting location:", error);
+                reject(error);  
+            });
+        }).then(() => {
 
-        map = new google.maps.Map(document.getElementById('map'), {
-            zoom: 18,
-            center: center,
-        });
+            map = new google.maps.Map(document.getElementById('map'), {
+                zoom: 18,
+                center: center,
+            });
 
 
-        google.maps.event.addListener(map, 'click', function (event) {
-            placeMarker(event.latLng);
-        });
 
-        document.getElementById('slide').addEventListener('input', function () {
-            update_marker();
+            google.maps.event.addListener(map, 'click', function (event) {
+                placeMarker(event.latLng);
+            });
+
+            document.getElementById('slide').addEventListener('input', function () {
+                update_marker();
+            });
         });
     }
 
@@ -53,7 +68,7 @@
                 fillOpacity: 0.35,
                 map: map,
                 center: location,
-                radius: marker.radius/1.5
+                radius: marker.radius / 1.5
             });
 
             inner_inner_marker = new google.maps.Circle({
@@ -64,18 +79,19 @@
                 fillOpacity: 0.35,
                 map: map,
                 center: location,
-                radius: marker.radius/3
+                radius: marker.radius / 3
             });
         }
 
         document.getElementById('id_location').value = location.lat() + ',' + location.lng();
-        document.getElementById('id_radius').value =  marker.getRadius();
+        document.getElementById('id_radius').value = marker.getRadius();
     }
 
     function update_marker() {
         marker.setRadius(parseInt(document.getElementById('slide').value))
-        inner_marker.setRadius(parseInt(document.getElementById('slide').value)/1.5)
-        inner_inner_marker.setRadius(parseInt(document.getElementById('slide').value)/3)
+        inner_marker.setRadius(parseInt(document.getElementById('slide').value) / 1.5)
+        inner_inner_marker.setRadius(parseInt(document.getElementById('slide').value) / 3)
+        document.getElementById('id_radius').value = marker.getRadius();
     }
 </script>
 

@@ -25,7 +25,7 @@ def geocache_add(request):
         if form.is_valid():
             # Save the question
             latitude, longitude = map(float, form.cleaned_data['location'].split(','))
-            geocache = Geocache(name = form.cleaned_data['name'],cacher = current_user(request),cache_date = timezone.now(),lat = latitude, lng = longitude, description = form.cleaned_data['description'],hint = form.cleaned_data['hint'],radius = form.cleaned_data['radius'])
+            geocache = Geocache(name = form.cleaned_data['name'],cacher = current_user(request),cache_date = timezone.localtime(timezone.now()),lat = latitude, lng = longitude, description = form.cleaned_data['description'],hint = form.cleaned_data['hint'],radius = form.cleaned_data['radius'])
             geocache.save()  
             return redirect('catalog')  
         else:
