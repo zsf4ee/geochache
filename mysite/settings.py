@@ -107,14 +107,11 @@ SOCIALACCOUNT_PROVIDERS = {
 
 if os.getenv("IS_PRODUCTION") is not None:
     DATABASES = {
-        "default": {
-            "ENGINE": dj_database_url.config(
-                conn_max_age=600,
-                conn_health_checks=True,
-                ssl_require=True,
-            ),
-            "NAME": "database"
-        }
+        "default": dj_database_url.config(
+            conn_max_age=600,
+            conn_health_checks=True,
+            ssl_require=True,
+        )
     }
 else:
     DATABASES = {
