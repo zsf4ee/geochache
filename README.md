@@ -14,6 +14,10 @@ To setup your virtual environment, run the following command:
 python -m venv venv
 source venv/bin/activate
 ```
+For Windows instead:
+```
+./venv/Scripts/activate
+```
 
 Install all of the dependencies for the project:
 ```

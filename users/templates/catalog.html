@@ -1,0 +1,94 @@
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBBZRxuya4tR7SFOmf2dHAMikvaxEGP_OY"></script>
+<script>
+    var map;
+    var ne_bound;
+    var sw_bound;
+    var boundsUrl = "{% url 'bounds' %}";
+    var cacheUrl = "{% url 'cache' %}"
+
+    function initMap() {
+        var center = { lat: 38.0336, lng: -78.5080 };
+
+        map = new google.maps.Map(document.getElementById('map'), {
+            zoom: 15,
+            center: center
+        });
+
+        google.maps.event.addListener(map, 'bounds_changed', function (event) {
+            ne_bound = map.getBounds().getNorthEast();
+            sw_bound = map.getBounds().getSouthWest();
+            updateMarkers();
+        });
+
+
+    }
+
+    function updateMarkers() {
+        fetch(`${boundsUrl}?ne_lat=${ne_bound.lat()}&ne_lng=${ne_bound.lng()}&sw_lat=${sw_bound.lat()}&sw_lng=${sw_bound.lng()}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                data.forEach(geocache => {
+                    placeMarker({ lat: +geocache.lat, lng: +geocache.lng }, +geocache.radius);
+                });
+            })
+            .catch(error => {
+                console.error('There was a problem with the fetch operation:', error.message);
+            });
+    }
+
+
+    function placeMarker(location, radius) {
+        var marker;
+
+        if(radius <= 50){
+            marker = new google.maps.Marker({
+             position: location,
+             map,
+             icon : {
+                url: "/static/images/marker_green.png",
+                scaledSize: new google.maps.Size(40,25)
+            }
+            }); 
+        }
+        else if(radius <= 150){
+            marker = new google.maps.Marker({
+             position: location,
+             map,
+             icon : {
+                url: "/static/images/marker_yellow.png",
+                scaledSize: new google.maps.Size(40,25)
+            }
+            }); 
+        }
+        else{
+            marker = new google.maps.Marker({
+             position: location,
+             map,
+             icon : {
+                url: "/static/images/marker_red.png",
+                scaledSize: new google.maps.Size(40,25)
+            }
+            }); 
+        }
+    
+        
+        marker.addListener('click', function (event) {
+            window.location.href = `${cacheUrl}?lat=${location.lat}&lng=${location.lng}`
+        });
+    }
+
+
+</script>
+
+<body onload="initMap()">
+    <div>
+        <div id="map" style="height: 500px; width: 60%; align-self: center;"></div>
+        <br>
+        </form>
+    </div>
+</body>
