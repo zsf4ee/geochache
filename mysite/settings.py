@@ -105,20 +105,24 @@ SOCIALACCOUNT_PROVIDERS = {
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-if os.getenv("IS_PRODUCTION") != None:
+if os.getenv("IS_PRODUCTION") is not None:
     DATABASES = {
-        "default": dj_database_url.config(
-                    conn_max_age=600,
-                    conn_health_checks=True,
-                    ssl_require=True,
-                )
+        "default": {
+            "ENGINE": dj_database_url.config(
+                conn_max_age=600,
+                conn_health_checks=True,
+                ssl_require=True,
+            ),
+            "NAME": "database"
+        }
     }
 else:
     DATABASES = {
-        "defaultINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": BASE_DIR / "db.sqlite3",
+        }
     }
-
 AUTH_USER_MODEL = 'users.User'
 
 # DATABASES = {}
