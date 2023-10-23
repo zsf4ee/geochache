@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     "allauth.socialaccount",
     "allauth.socialaccount.providers.google",
     "users",
+    "bootstrap5"
 ]
 
 MIDDLEWARE = [
@@ -104,8 +105,7 @@ SOCIALACCOUNT_PROVIDERS = {
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-# if os.getenv("IS_PRODUCTION") != None:
-if True:
+if os.getenv("IS_PRODUCTION") is not None:
     DATABASES = {
         "default": dj_database_url.config(
             conn_max_age=600,
@@ -115,10 +115,11 @@ if True:
     }
 else:
     DATABASES = {
-        "defaultINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": BASE_DIR / "db.sqlite3",
+        }
     }
-
 AUTH_USER_MODEL = 'users.User'
 
 # DATABASES = {}
@@ -146,7 +147,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = "en-us"
 
-TIME_ZONE = "UTC"
+TIME_ZONE = "America/New_York"
 
 USE_I18N = True
 

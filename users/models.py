@@ -6,4 +6,40 @@ from django.contrib.auth import get_user_model
 
 class User(AbstractUser):
     is_admin = models.BooleanField(default=False)
+
+# Holds data for one instance of a Geocache
+class Geocache(models.Model):
+    name = models.CharField(max_length=50)
+    active = models.BooleanField(default= False)
+    cacher = models.ForeignKey(User, on_delete = models.CASCADE)
+    find_count = models.IntegerField(default=0)
+    cache_date = models.DateTimeField()
+    lat = models.DecimalField( max_digits=10, decimal_places=8)
+    lng = models.DecimalField( max_digits=11, decimal_places=8)
+    description = models.CharField(max_length=500)
+    hint = models.CharField(max_length=150, null=True, blank=True)
+    radius = models.IntegerField(null=True)
+
+
+    def __str__(self):
+        return self.cacher.first_name + " " + self.cacher.last_name + "[" + self.name + "] : " + str(self.find_count) + " " + str(self.id)
+
+# Holds data for one instance of geocache being found
+class Find(models.Model):
+    finder = models.ForeignKey(User, on_delete= models.CASCADE)
+    geocache = models.ForeignKey(Geocache, on_delete= models.CASCADE)
+    timestamp = models.DateTimeField()
+
+    def __str__(self):
+        return self.finder.first_name + " " + self.finder.last_name + " : " + str(self.timestamp)
+
+
+class Comment(models.Model):
+    geocache = models.ForeignKey(Geocache, on_delete= models.CASCADE,null=True)
+    user = models.ForeignKey(User, on_delete= models.CASCADE)
+    text = models.CharField(max_length=255)
+    date = models.DateTimeField()
+
+
+
     
