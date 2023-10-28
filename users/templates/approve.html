@@ -1,0 +1,38 @@
+<script>
+    var activeUrl = "{% url 'getactive' %}";
+    function getCaches() {
+        fetch(`${activeUrl}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                data.forEach(geocache => {
+                    console.log(geocache);
+                    printCache(geocache);
+                });
+            })
+            .catch(error => {
+                console.error('There was a problem with the fetch operation:', error.message);
+            });
+    }
+
+    function printCache(geocache){
+        const div = document.createElement("div");
+        const header = document.createElement("h3");
+        header.innerText = geocache.name;
+        div.appendChild(header);
+        var base = document.getElementById('base');
+        base.appendChild(div);
+    }
+
+</script>
+
+<body>
+    <h1>Approval</h1>
+    <div onload="getCaches()" id="base">
+        
+    </div>
+</body>

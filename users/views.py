@@ -74,4 +74,13 @@ def cache(request):
     }
     
     return render(request, 'cache.html', context)
-    
+
+def approve(request):
+    return render(request, 'approve.html' )
+
+def getactive(request):
+    geocaches = Geocache.objects.filter(active=True)
+    if(geocaches.exists()):
+        return JsonResponse(list(geocaches), safe=False)
+    else:
+        return HttpResponseNotFound("No geocaches found.")

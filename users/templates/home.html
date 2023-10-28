@@ -21,6 +21,7 @@
     <p>You are signed in as {{user.email}}.<br>
         {% if user.is_admin %}
             You are an admin user.
+            <a class="btn btn-secondary" href="{% url 'approve' %}">Approve!!</a>
         {% endif %}
     </p>
 
