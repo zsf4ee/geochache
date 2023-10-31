@@ -20,7 +20,7 @@ def login_view(request):
 
 def logout_view(request):
     logout(request)
-    return render(request, "logout.html")
+    return render(request, "home.html")
 
 def geocache_add(request):
     if request.method == 'POST':
