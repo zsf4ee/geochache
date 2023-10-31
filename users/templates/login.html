@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+
+{% load socialaccount %}
+
+<h2>Google Login</h2>
+<div>
+    <a class="btn btn-primary" href="{% url 'add' %}">New GeoCache</a>
+    <a class="btn btn-primary" href="{% url 'catalog' %}">Cache Center</a>
+</div>
+<a class="btn btn-secondary" href="{% provider_login_url 'google' %}?next=/">Login with Google</a>
+
+{% if user.is_authenticated%}
+    <p>You are signed in as {{user.email}}.<br>
+        {% if user.is_admin %}
+            You are an admin user.
+            <a class="btn btn-secondary" href="{% url 'approve' %}">Approve!!</a>
+        {% endif %}
+    </p>
+
+    <a href="logout">Logout<a>
+{% endif %}
+
+{% endblock %}

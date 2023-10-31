@@ -4,30 +4,8 @@
 
 {% block content %}
 
-{% load bootstrap5 %}
-{% bootstrap_css %}
-{% bootstrap_javascript %}
-
-<h2>Google Login</h2>
-<div>
-    <a class="btn btn-primary" href="{% url 'add' %}">New GeoCache</a>
-    <a class="btn btn-primary" href="{% url 'catalog' %}">Cache Center</a>
-</div>
-<a class="btn btn-secondary" href="{% provider_login_url 'google' %}?next=/">Login with Google</a>
-
-{% if user.is_authenticated%}
-    <p>You are signed in as {{user.email}}.<br>
-        {% if user.is_admin %}
-            You are an admin user.
-            <a class="btn btn-secondary" href="{% url 'approve' %}">Approve!!</a>
-        {% endif %}
-    </p>
-
-    <a href="logout">Logout<a>
-{% endif %}
-
-{% endblock %}
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBBZRxuya4tR7SFOmf2dHAMikvaxEGP_OY"></script>
+
 <script>
     var map;
     var marker;
@@ -38,6 +16,7 @@
     var center;
 
     function initMap() {
+        console.log("Initializing map...")
         new Promise((resolve, reject) => {
             navigator.geolocation.getCurrentPosition(function (position) {
                 cur_lat = position.coords.latitude;
@@ -55,8 +34,6 @@
                 zoom: 18,
                 center: center,
             });
-
-
 
             google.maps.event.addListener(map, 'click', function (event) {
                 placeMarker(event.latLng);
@@ -118,9 +95,12 @@
         inner_inner_marker.setRadius(parseInt(document.getElementById('slide').value) / 3)
         document.getElementById('id_radius').value = marker.getRadius();
     }
+    
+    initMap();
 </script>
 
-<div style="align-self: center;" onLoad="initMap()">
+<div style="align-self: center;">
+    <div id="map" style="height: 500px; width: 60%; align-self: center;"></div>
     <form method="post">
         {% csrf_token %}
         {{ form.name.label_tag }} {{ form.name }}
@@ -134,8 +114,6 @@
         {{ form.radius }}
         <label>Radius:</label>
         <input id="slide" type="range" min="1" max="200" value="50">
-        <div id="map" style="height: 500px; width: 60%; align-self: center;"></div>
-        <br>
         <button type="submit">Submit</button>
     </form>
 </div>

@@ -4,6 +4,12 @@
 
 {% block content %}
 
+<div>
+    <div id="map" style="height: 500px; width: 60%; align-self: center;"></div>
+    <br>
+    </form>
+</div>
+
 
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBBZRxuya4tR7SFOmf2dHAMikvaxEGP_OY"></script>
 <script>
@@ -87,13 +93,8 @@
         });
     }
 
-
+    initMap();
 </script>
 
-<div onLoad="initMap()">
-    <div id="map" style="height: 500px; width: 60%; align-self: center;"></div>
-    <br>
-    </form>
-</div>
 
 {% endblock %}
