@@ -9,9 +9,27 @@
 </head>
 
 <body>
-    You have logged out!
 
-    <a href="/">Return home</a>
 </body>
 
 </html>
+
+{% extends "base.html" %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+
+{% load socialaccount %}
+{% load bootstrap5 %}
+
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+
+You have logged out!
+
+<a href="/">Return home</a>
+
+{% endif %}
+
+{% endblock %}

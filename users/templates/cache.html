@@ -1,3 +1,9 @@
+{% extends "base.html" %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBBZRxuya4tR7SFOmf2dHAMikvaxEGP_OY"></script>
 <script>
     var map;
@@ -54,35 +60,32 @@
         });
 
     }
-
-
 </script>
 
-<body onload="initMap()">
-    <div>
-        <div>
-            <h1>{{ geocache.name }}</h1>
-            <p>Placed on: {{ geocache.cache_date }}
-            <p>Placed by: {{ geocache.cacher.first_name }} {{ geocache.cacher.last_name }}</p>
-            <p>Description: {{ geocache.description }}</p>
-            <p>Hint: {{ geocache.hint }}</p>
-            <p>Found {{ geocache.find_count }} times</p>
-            <div id="map" style="height: 500px; width: 60%; align-self: center;"></div>
-            <h2>Finds</h2>
-            <ul>
-                {% for find in finds %}
-                <li>{{ find.finder.first_name }} {{ find.finder.last_name }} on {{ find.timestamp }}</li>
-                {% endfor %}
-            </ul>
 
-            <h2>Comments</h2>
-            <ul>
-                {% for comment in comments %}
-                <li>{{ comment.user.first_name }} {{ comment.user.last_name }} ({{ comment.date }}): {{ comment.text }}
-                </li>
-                {% endfor %}
-            </ul>
-        </div>
+<div onLoad="initMap()">
+    <h1>{{ geocache.name }}</h1>
+    <p>Placed on: {{ geocache.cache_date }}
+    <p>Placed by: {{ geocache.cacher.first_name }} {{ geocache.cacher.last_name }}</p>
+    <p>Description: {{ geocache.description }}</p>
+    <p>Hint: {{ geocache.hint }}</p>
+    <p>Found {{ geocache.find_count }} times</p>
+    <div id="map" style="height: 500px; width: 60%; align-self: center;"></div>
+    <h2>Finds</h2>
+    <ul>
+        {% for find in finds %}
+        <li>{{ find.finder.first_name }} {{ find.finder.last_name }} on {{ find.timestamp }}</li>
+        {% endfor %}
+    </ul>
 
-    </div>
-</body>
+    <h2>Comments</h2>
+    <ul>
+        {% for comment in comments %}
+        <li>{{ comment.user.first_name }} {{ comment.user.last_name }} ({{ comment.date }}): {{ comment.text }}
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+
+
+{% endblock %}

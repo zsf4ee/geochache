@@ -1,3 +1,9 @@
+{% extends "base.html" %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+
 <script>
     var activeUrl = "{% url 'getactive' %}";
     function getCaches() {
@@ -30,9 +36,10 @@
 
 </script>
 
-<body>
-    <h1>Approval</h1>
-    <div onload="getCaches()" id="base">
-        
-    </div>
-</body>
+
+<h1>Approval</h1>
+<div onload="getCaches()" id="base">
+    
+</div>
+
+{% endblock %}
