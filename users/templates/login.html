@@ -7,11 +7,13 @@
 {% load socialaccount %}
 
 <h2>Login</h2>
+<a class="btn btn-secondary" href="{% provider_login_url 'google' %}?next=/">Login</a>
+
+<br/><br/>
 <div>
-    <a class="btn btn-primary" href="{% url 'add' %}">New GeoCache</a>
-    <a class="btn btn-primary" href="{% url 'catalog' %}">Cache Center</a>
+    <a class="btn btn-outline-success" href="{% url 'add' %}">New GeoCache</a>
+    <a class="btn btn-outline-success" href="{% url 'catalog' %}">Cache Center</a>
 </div>
-<a class="btn btn-secondary" href="{% provider_login_url 'google' %}?next=/">Login with Google</a>
 
 {% if user.is_authenticated%}
     <p>You are signed in as {{user.email}}.<br>

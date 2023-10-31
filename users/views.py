@@ -12,8 +12,8 @@ def current_user(request):
     user = User.objects.filter(email=request.user.email).first()
     return user
 
-def home(request):
-    return render(request, "home.html")
+def welcome(request):
+    return render(request, "welcome.html")
 
 def login_view(request):
     return render(request, "login.html")

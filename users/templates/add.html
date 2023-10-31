@@ -99,23 +99,47 @@
     initMap();
 </script>
 
-<div style="align-self: center;">
-    <div id="map" style="height: 500px; width: 60%; align-self: center;"></div>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.name.label_tag }} {{ form.name }}
-        <br>
-        {{ form.description.label_tag }} {{ form.description }}
-        <br>
-        {{ form.hint.label_tag }} {{ form.hint }}
-        <br>
-        {{ form.location }}
-        <br>
-        {{ form.radius }}
-        <label>Radius:</label>
-        <input id="slide" type="range" min="1" max="200" value="50">
-        <button type="submit">Submit</button>
-    </form>
+<style>
+    #map {
+        width: 32rem;
+        height: 32rem;
+        margin-bottom: 1rem;
+        flex: 75%;
+    }
+    .container {
+        display: flex;
+        align-items: center;
+    }
+
+    .column {
+        flex: 25%;
+        margin: 1rem;
+    }
+
+    body {
+        max-width: 48rem;
+    }
+</style>
+<h2>Create a new geocache</h2>
+<div style="align-self: center;" class="container">
+    <div id="map" class="column"></div>
+    <div class="column">
+        <form method="post" clas="form-group">
+            {% csrf_token %}
+            {{ form.name.label_tag }} {{ form.name }}
+            <br>
+            {{ form.description.label_tag }} {{ form.description }}
+            <br>
+            {{ form.hint.label_tag }} {{ form.hint }}
+            <br>
+            {{ form.location }}
+            <br>
+            {{ form.radius }}
+            <label>Radius:</label>
+            <input id="slide" type="range" min="1" max="200" value="50">
+            <button type="submit">Submit</button>
+        </form>
+    </div>
 </div>
 
 {% endblock %}
