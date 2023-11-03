@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "base-with-header.html" %}
 
 {% block title %}Add{% endblock %}
 
@@ -101,8 +101,8 @@
 
 <style>
     #map {
-        width: 32rem;
-        height: 32rem;
+        width: 24rem;
+        height: 24rem;
         margin-bottom: 1rem;
         flex: 75%;
     }
@@ -116,9 +116,6 @@
         margin: 1rem;
     }
 
-    body {
-        max-width: 48rem;
-    }
 </style>
 <h2>Create a new geocache</h2>
 <div style="align-self: center;" class="container">
