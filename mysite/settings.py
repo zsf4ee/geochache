@@ -50,7 +50,7 @@ INSTALLED_APPS = [
     "allauth.socialaccount",
     "allauth.socialaccount.providers.google",
     "users",
-    "bootstrap5"
+    "bootstrap5",
 ]
 
 MIDDLEWARE = [
@@ -120,7 +120,7 @@ else:
             "NAME": BASE_DIR / "db.sqlite3",
         }
     }
-AUTH_USER_MODEL = 'users.User'
+AUTH_USER_MODEL = "users.User"
 
 # DATABASES = {}
 # Password validation

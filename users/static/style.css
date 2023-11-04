@@ -1,8 +1,7 @@
-
 html {
     width: 100%;
     height: 100%;
-    background-color: #f7f5e9;
+    /* background-color: #EFE9E3; */
     color: #283618;
 }
 
@@ -13,4 +12,9 @@ body {
     padding: 2rem;
     margin: 0rem auto;
 
+}
+
+.btn-primary {
+    background-color: #7f5539;
+    height: auto;
 }
