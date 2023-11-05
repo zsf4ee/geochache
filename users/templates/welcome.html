@@ -4,7 +4,7 @@
 
 {% block content %}
 
-<header class="py-3 mb-4 border-bottom">
+{% comment %} <header class="py-3 mb-4 border-bottom">
     <div class="container d-flex flex-wrap justify-content-center">
         <a href="/" class="d-flex align-items-center mb-3 mb-lg-0 me-lg-auto text-dark text-decoration-none">
             <img src="/static/images/favicon.svg" width="50" height="auto" alt="logo">
@@ -15,7 +15,17 @@
         </form>
         <a class="btn btn-primary mb-4 px-4" href="{% url 'login' %}">Log in</a>
     </div>
+</header> {% endcomment %}
+
+<header class="container d-flex">
+    <img src="/static/images/favicon.svg" width="50" alt="">
+    <a href="#">CAVGEO</a>
+    <form action="">
+        <input type="search">
+    </form>
+    <button>login</button>
 </header>
+
 
 <main>
     <div class="py-4 mb-4 text-center">
