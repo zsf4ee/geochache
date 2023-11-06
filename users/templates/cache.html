@@ -1,3 +1,9 @@
+{% extends "base.html" %}
+
+{% block title %}Cache {{ geocache.lat }} {{ geocache.lng }}{% endblock %}
+
+{% block content %}
+
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBBZRxuya4tR7SFOmf2dHAMikvaxEGP_OY"></script>
 <script>
     var map;
@@ -61,7 +67,18 @@
 <body onload="initMap()">
     <div>
         <div>
-            <h1>{{ geocache.name }}</h1>
+            
+            <h1>
+                {{ geocache.name }}
+                {% if user.is_admin %}
+                {% if not geocache.active %}
+                    <a class="btn btn-primary" href="{% url 'checkoff' pk=geocache.pk %}">Approve</a>
+                {% else %}
+                    <span style="color: green; font-size: 1rem">Approved</span>
+                {% endif %}
+            {% endif %}
+
+            </h1>
             <p>Placed on: {{ geocache.cache_date }}
             <p>Placed by: {{ geocache.cacher.first_name }} {{ geocache.cacher.last_name }}</p>
             <p>Description: {{ geocache.description }}</p>
@@ -83,6 +100,7 @@
                 {% endfor %}
             </ul>
         </div>
-
     </div>
 </body>
+
+{% endblock %}

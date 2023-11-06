@@ -1,6 +1,7 @@
-from django.http import HttpResponseNotFound, JsonResponse
-from django.shortcuts import render, redirect
+from django.http import HttpResponseNotFound, HttpResponseRedirect, JsonResponse
+from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.auth import logout
+from django.urls import reverse
 from django.utils import timezone
 
 from .models import *
@@ -12,12 +13,15 @@ def current_user(request):
     user = User.objects.filter(email=request.user.email).first()
     return user
 
-def home(request):
-    return render(request, "home.html")
+def welcome(request):
+    return render(request, "welcome.html")
+
+def login_view(request):
+    return render(request, "login.html")
 
 def logout_view(request):
     logout(request)
-    return render(request, "logout.html")
+    return render(request, "home.html")
 
 def geocache_add(request):
     if request.method == 'POST':
@@ -49,7 +53,7 @@ def geocaches_within_bounds(request):
         lat__lte=ne_lat,
         lat__gte=sw_lat,
         lng__lte=ne_lng,
-        lng__gte=sw_lng
+        lng__gte=sw_lng,active=True
     ).values('lat', 'lng','radius')
 
     if(geocaches.exists()):
@@ -74,4 +78,14 @@ def cache(request):
     }
     
     return render(request, 'cache.html', context)
-    
+
+def approve(request):
+    geocaches = Geocache.objects.filter(active=False)
+    return render(request, 'approve.html',{'geocaches': geocaches} )
+
+def checkoff(request,pk):
+    geocache = get_object_or_404(Geocache, pk=pk)
+    geocache.active = True
+    geocache.save()
+    cache_url = reverse('cache') + f'?lat={geocache.lat}&lng={geocache.lng}'    
+    return HttpResponseRedirect(cache_url)

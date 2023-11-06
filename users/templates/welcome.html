@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+
+{% block title %}CavGeo{% endblock %}
+
+{% block content %}
+
+{% comment %} <header class="py-3 mb-4 border-bottom">
+    <div class="container d-flex flex-wrap justify-content-center">
+        <a href="/" class="d-flex align-items-center mb-3 mb-lg-0 me-lg-auto text-dark text-decoration-none">
+            <img src="/static/images/favicon.svg" width="50" height="auto" alt="logo">
+            <span class="fs-3 fw-bold">CAVGEO</span>
+        </a>
+        <form class="col-12 col-lg-auto mb-3 me-2 ">
+            <input type="search" class="form-control" placeholder="Search caches" aria-label="Search">
+        </form>
+        <a class="btn btn-primary mb-4 px-4" href="{% url 'login' %}">Log in</a>
+    </div>
+</header> {% endcomment %}
+
+<style>
+    footer {
+        position: relative;
+    }
+
+
+
+    .icon {
+
+    }
+</style>
+{% comment %} 
+<header class="container d-flex">
+    <span>
+
+    <img class="icon" src="/static/images/favicon.svg" width="50" alt="">
+    CAVGEO
+    <form action="">
+        <input type="search">
+    </form>
+    <button>Login</button>
+
+    </span>
+</header>
+{% endcomment %}
+
+<main>
+    <div class="py-4 mb-4 text-center">
+        <h1 class="display-5 fw-bold">Discover hidden treasures around Grounds!</h1>
+        <div class="col-lg-6 mx-auto">
+            <p class="fs-4 mb-4">Join the world's largest treasure hunt</p>
+            <img src="static/images/grounds.png" width="800" class="mb-4" alt="map of grounds">
+            <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+                <a type="button" class="btn btn-primary btn-lg px-4 gap-3" href="{% url 'login' %}">Sign up for free</a>
+                <button type="button" class="btn btn-outline-secondary btn-lg px-4">Learn More</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="container mb-4">
+        <h2 class="text-center mb-4">3 steps to begin your adventure</h2>
+        <div class="row">
+            <!-- Step 1 -->
+            <div class="col-md-4 text-center">
+                <img src="/static/images/signup.svg" width="100" alt="signup image">
+                <h3>Create an account</h3>
+                <p>Create an account online or through the Geocaching® app to view a map of geocaches near you.</p>
+            </div>
+    
+            <!-- Step 2 -->
+            <div class="col-md-4 text-center">
+                <img src="static/images/find_geocache.svg" class="center"width="100" alt="geocache image">
+                <h3>Find a geocache</h3>
+                <p>Use the app to navigate to a geocache nearby. Don't forget to bring a pen!</p>
+            </div>
+    
+            <!-- Step 3 -->
+            <div class="col-md-4 text-center">
+                <img src="static/images/leaderboard.svg" width="100" alt="leaderboard image">
+                <h3>Compete with your friends</h3>
+                <p>Once you find a geocache, you will be rewarded with points. Rack them up and make a name for yourself on the leaderboard!</p>
+            </div>
+        </div>
+    </div>
+</main>
+
+
+
+{% endblock %}
