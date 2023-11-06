@@ -17,15 +17,31 @@
     </div>
 </header> {% endcomment %}
 
+<style>
+    footer {
+        position: relative;
+    }
+
+
+
+    .icon {
+
+    }
+</style>
+{% comment %} 
 <header class="container d-flex">
-    <img src="/static/images/favicon.svg" width="50" alt="">
-    <a href="#">CAVGEO</a>
+    <span>
+
+    <img class="icon" src="/static/images/favicon.svg" width="50" alt="">
+    CAVGEO
     <form action="">
         <input type="search">
     </form>
-    <button>login</button>
-</header>
+    <button>Login</button>
 
+    </span>
+</header>
+{% endcomment %}
 
 <main>
     <div class="py-4 mb-4 text-center">
@@ -52,7 +68,7 @@
     
             <!-- Step 2 -->
             <div class="col-md-4 text-center">
-                <img src="static/images/find_geocache.svg" width="100" alt="geocache image">
+                <img src="static/images/find_geocache.svg" class="center"width="100" alt="geocache image">
                 <h3>Find a geocache</h3>
                 <p>Use the app to navigate to a geocache nearby. Don't forget to bring a pen!</p>
             </div>
@@ -66,5 +82,7 @@
         </div>
     </div>
 </main>
+
+
 
 {% endblock %}

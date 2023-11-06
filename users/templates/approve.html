@@ -1,18 +1,29 @@
 {% extends "base.html" %}
 
-{% block title %}Approval{% endblock %}
+{% block title %}Unapproved Caches{% endblock %}
 
 {% block content %}
 
-<h1>Approval</h1>
+<h1>Unapproved Caches</h1>
 <div id="base">
     {% for geocache in geocaches %}
-    <div style="border: 1px solid #ddd; padding: 10px; background-color: #fff; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); margin-bottom: 20px; border-radius: 4px;">
-    <a class="btn btn-primary" href="{% url 'cache' %}?lat={{geocache.lat}}&lng={{geocache.lng}}">{{ geocache.name }}</a>
-    <h3>Submitted By: {{geocache.cacher}}</h3>
-    <h3>Active: {{geocache.active}}</h3>
-    </div>
+        <div class="geocache-box">
+            <h2>{{ geocache.name }}</h2>
+            <h3>Submitted By: {{geocache.cacher}}</h3>
+            <a class="btn btn-primary" href="{% url 'cache' %}?lat={{geocache.lat}}&lng={{geocache.lng}}">Verify</a>
+        </div>
     {% endfor %}
 </div>
+
+<style>
+    .geocache-box {
+        border: 1px solid #ddd;
+        padding: 10px; 
+        background-color: #fff; 
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
+        margin-bottom: 20px; 
+        border-radius: 4px;
+    }
+</style>
 
 {% endblock %}

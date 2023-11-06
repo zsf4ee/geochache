@@ -6,24 +6,25 @@
 
 {% load socialaccount %}
 
-<h2>Login</h2>
-<a class="btn btn-secondary" href="{% provider_login_url 'google' %}?next=/">Login</a>
-
-<br/><br/>
-<div>
-    <a class="btn btn-outline-success" href="{% url 'add' %}">New GeoCache</a>
-    <a class="btn btn-outline-success" href="{% url 'catalog' %}">Cache Center</a>
-</div>
+<h2>Home</h2>
 
 {% if user.is_authenticated%}
     <p>You are signed in as {{user.email}}.<br>
         {% if user.is_admin %}
             You are an admin user.
-            <a class="btn btn-secondary" href="{% url 'approve' %}">Approve!!</a>
+            <a class="btn btn-outline-success" href="{% url 'approve' %}">Approve</a>
         {% endif %}
     </p>
 
-    <a href="logout">Logout<a>
+    <br/>
+    <div>
+        <a class="btn btn-outline-success" href="{% url 'add' %}">New GeoCache</a>
+        <a class="btn btn-outline-success" href="{% url 'catalog' %}">Cache Center</a>
+    </div>
+    <br/><br/>
+    <a class="btn btn-secondary" href="{% url 'logout' %}">Logout<a>
+{% else %}
+    <a class="btn btn-secondary" href="{% provider_login_url 'google' %}?next=/">Login</a>
 {% endif %}
 
 {% endblock %}
