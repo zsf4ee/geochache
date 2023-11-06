@@ -10,5 +10,5 @@ urlpatterns = [
     path('bounds', views.geocaches_within_bounds, name="bounds"),
     path('cache',views.cache, name="cache"),
     path('approval',views.approve, name="approve"),
-    path('getactive',views.getactive,name="getactive")
+    path('checkoff/<int:pk>/',views.checkoff,name="checkoff"),
 ]
