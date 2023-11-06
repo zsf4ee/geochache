@@ -1,18 +1,18 @@
-{% load bootstrap5 %}
+{% extends "base.html" %}
 
-{% bootstrap_css %}
-{% bootstrap_javascript %}
+{% block title %}Approval{% endblock %}
 
+{% block content %}
 
-<body>
-    <h1>Approval</h1>
-    <div id="base">
-        {% for geocache in geocaches %}
-        <div style="border: 1px solid #ddd; padding: 10px; background-color: #fff; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); margin-bottom: 20px; border-radius: 4px;">
-        <a class="btn btn-primary" href="{% url 'cache' %}?lat={{geocache.lat}}&lng={{geocache.lng}}">{{ geocache.name }}</a>
-        <h3>Submitted By: {{geocache.cacher}}</h3>
-        <h3>Active: {{geocache.active}}</h3>
-        </div>
-        {% endfor %}
+<h1>Approval</h1>
+<div id="base">
+    {% for geocache in geocaches %}
+    <div style="border: 1px solid #ddd; padding: 10px; background-color: #fff; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); margin-bottom: 20px; border-radius: 4px;">
+    <a class="btn btn-primary" href="{% url 'cache' %}?lat={{geocache.lat}}&lng={{geocache.lng}}">{{ geocache.name }}</a>
+    <h3>Submitted By: {{geocache.cacher}}</h3>
+    <h3>Active: {{geocache.active}}</h3>
     </div>
-</body>
+    {% endfor %}
+</div>
+
+{% endblock %}

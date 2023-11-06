@@ -1,3 +1,9 @@
+{% extends "base.html" %}
+
+{% block title %}Cache {{ geocache.lat }} {{ geocache.lng }}{% endblock %}
+
+{% block content %}
+
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBBZRxuya4tR7SFOmf2dHAMikvaxEGP_OY"></script>
 <script>
     var map;
@@ -91,3 +97,5 @@
 
     </div>
 </body>
+
+{% endblock %}
