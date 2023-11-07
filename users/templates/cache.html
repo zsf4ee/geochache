@@ -64,6 +64,30 @@
 
 </script>
 
+<style>
+    .comments-section {
+        margin-top: 20px;
+    }
+
+    .card {
+        margin-bottom: 10px;
+        border: 1px solid #513523;
+    }
+
+    .card-header {
+        background-color: #7f5539;
+        font-weight: bold;
+    }
+
+    .card-body {
+        background-color: #ffffff;
+    }
+
+    .card-text {
+        color: #333;
+    }
+</style>
+
 <body onload="initMap()">
     <div>
         <div>
@@ -87,13 +111,18 @@
             <a class="btn btn-primary" href="{% url 'find' pk=geocache.pk %}">Report Find</a>
             <div id="map" style="height: 500px; width: 60%; align-self: center;"></div>
             <h2>Finds</h2>
-            <ul>
+            <div class="list-group">
                 {% for find in finds %}
-                <li>{{ find.finder.first_name }} {{ find.finder.last_name }} on {{ find.timestamp }}</li>
+                <a  class="list-group-item list-group-item-action">
+                    {{ find.finder.first_name }} {{ find.finder.last_name }} on {{ find.timestamp|date:"N j, Y g:i " }}
+                </a>
+                {% empty %}
+                <p class="list-group-item">No finds yet.</p>
                 {% endfor %}
-            </ul>
+            </div>
 
-            
+
+
 
             <h2>Comments</h2>
             {% if user_has_find %}
@@ -104,12 +133,20 @@
             </form>
             {% endif %}
 
-            <ul>
+            <div class="comments-section">
                 {% for comment in comments %}
-                <li>{{ comment.user.first_name }} {{ comment.user.last_name }} ({{ comment.date }}): {{ comment.text }}
-                </li>
+                <div class="card mb-3">
+                    <div class="card-header">
+                        Commented by {{ comment.user.first_name }} {{ comment.user.last_name }} on {{ comment.date }}
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text">{{ comment.text }}</p>
+                    </div>
+                </div>
+                {% empty %}
+                <p>No comments yet.</p>
                 {% endfor %}
-            </ul>
+            </div>
         </div>
     </div>
 </body>
