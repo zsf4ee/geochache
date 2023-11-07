@@ -3,7 +3,7 @@ from . import views
 
 urlpatterns = [
     path('', views.welcome, name="welcome"),
-    path('logout', views.login_view, name = "logout"),
+    path('logout', views.logout_view, name = "logout"),
     path('login', views.login_view, name = "login"),
     path('add', views.geocache_add, name = "add"),
     path('catalog', views.catalog, name = "catalog"),
@@ -11,4 +11,5 @@ urlpatterns = [
     path('cache',views.cache, name="cache"),
     path('approval',views.approve, name="approve"),
     path('checkoff/<int:pk>/',views.checkoff,name="checkoff"),
+    path('find/<int:pk>/',views.find,name="find")
 ]

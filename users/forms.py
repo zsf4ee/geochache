@@ -8,4 +8,4 @@ class GeoCacheForm(forms.Form):
     radius = forms.DecimalField(widget=forms.HiddenInput(),max_digits=6, decimal_places= 3)
 
 class CommentForm(forms.Form):
-    text = forms.CharField(label='Comment', max_length=255)
+    text = forms.CharField(label='Comment:', max_length=255)

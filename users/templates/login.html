@@ -24,7 +24,7 @@
     <br/><br/>
     <a class="btn btn-secondary" href="{% url 'logout' %}">Logout<a>
 {% else %}
-    <a class="btn btn-secondary" href="{% provider_login_url 'google' %}?next=/">Login</a>
+    <a class="btn btn-secondary" href="{% provider_login_url 'google' %}?next=/login">Login</a>
 {% endif %}
 
 {% endblock %}

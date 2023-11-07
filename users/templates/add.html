@@ -22,7 +22,6 @@
                 cur_lat = position.coords.latitude;
                 cur_long = position.coords.longitude;
                 center = { lat: position.coords.latitude, lng: position.coords.longitude };
-                console.log("Latitude:", cur_lat, "Longitude:", cur_long);
                 resolve(); 
             }, function (error) {
                 console.error("Error occurred while getting location:", error);
@@ -121,7 +120,7 @@
 <div style="align-self: center;" class="container">
     <div id="map" class="column"></div>
     <div class="column">
-        <form method="post" clas="form-group">
+        <form method="post" class="form-group">
             {% csrf_token %}
             {{ form.name.label_tag }} {{ form.name }}
             <br>
