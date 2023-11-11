@@ -1,16 +1,16 @@
 {% extends "base.html" %}
 
-{% block title %}Unapproved Caches{% endblock %}
+{% block title %}Find Caches{% endblock %}
 
 {% block content %}
 
-<h1>Unapproved Caches</h1>
+<h1>Find Caches</h1>
 <div id="base">
     {% for geocache in geocaches %}
         <div class="geocache-box">
             <h2>{{ geocache.name|title }}</h2>
             <h3>Submitted By: {{geocache.cacher|title}}</h3>
-            <a class="btn btn-primary" href="{% url 'cache' %}?lat={{geocache.lat}}&lng={{geocache.lng}}">Verify</a>
+            <a class="btn btn-primary" href="{% url 'cache' %}?lat={{geocache.lat}}&lng={{geocache.lng}}">Go</a>
         </div>
     {% endfor %}
 </div>

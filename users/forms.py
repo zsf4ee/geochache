@@ -9,3 +9,6 @@ class GeoCacheForm(forms.Form):
 
 class CommentForm(forms.Form):
     text = forms.CharField(label='Comment:', max_length=255)
+
+class DeclineForm(forms.Form):
+    text = forms.CharField(label='Reasoning:', max_length=255)

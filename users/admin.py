@@ -10,6 +10,7 @@ class CustomUserAdmin(UserAdmin):
             {
                 'fields': (
                     'is_admin',
+                    'find_count'
                 ),
             },
         ),

@@ -91,29 +91,36 @@
 <body onload="initMap()">
     <div>
         <div>
-
+            <a class="btn btn-primary" href="{% url 'login'%}">Home</a>
             <h1>
-                {{ geocache.name }}
+                {{ geocache.name|title }}
                 {% if user.is_admin %}
-                {% if not geocache.active %}
+                {% if not geocache.active and not geocache.declined %}
                 <a class="btn btn-primary" href="{% url 'checkoff' pk=geocache.pk %}">Approve</a>
-                {% else %}
-                <span style="color: green; font-size: 1rem">Approved</span>
+                <a class="btn btn-warning" href="{% url 'decline' pk=geocache.pk %}">Decline</a>
+                {% elif geocache.declined %}
+                <a class="btn btn-primary" href="{% url 'checkoff' pk=geocache.pk %}">Approve</a>
+                <span style="color: red; font-size: 1rem">Declined by: {{geocache.admin|title}}</span>
+                {% elif not geocache.declined %}
+                <a class="btn btn-warning" href="{% url 'decline' pk=geocache.pk %}">Decline</a>
+                <span style="color: green; font-size: 1rem">Approved by: {{geocache.admin|title}}</span>
                 {% endif %}
                 {% endif %}
-
             </h1>
+            
             <p>Placed on: {{ geocache.cache_date }}
             <p>Placed by: {{ geocache.cacher.first_name }} {{ geocache.cacher.last_name }}</p>
             <p>Description: {{ geocache.description }}</p>
             <p>Hint: {{ geocache.hint }}</p>
             <p>Found {{ geocache.find_count }} times</p>
+            {% if not geocache.declined %}
             <a class="btn btn-primary" href="{% url 'find' pk=geocache.pk %}">Report Find</a>
+            {% endif %}
             <div id="map" style="height: 500px; width: 60%; align-self: center;"></div>
             <h2>Finds</h2>
             <div class="list-group">
                 {% for find in finds %}
-                <a  class="list-group-item list-group-item-action">
+                <a class="list-group-item list-group-item-action">
                     {{ find.finder.first_name }} {{ find.finder.last_name }} on {{ find.timestamp|date:"N j, Y g:i " }}
                 </a>
                 {% empty %}
@@ -147,6 +154,7 @@
                 <p>No comments yet.</p>
                 {% endfor %}
             </div>
+            
         </div>
     </div>
 </body>

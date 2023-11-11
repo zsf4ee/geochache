@@ -1,8 +1,11 @@
+from datetime import timedelta
 from django.http import HttpResponseNotFound, HttpResponseRedirect, JsonResponse
 from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.auth import logout
 from django.urls import reverse
 from django.utils import timezone
+from django.db.models import Q
+
 
 from .models import *
 from .forms import *
@@ -77,7 +80,6 @@ def cache(request):
     if request.method == "POST":
         form = CommentForm(request.POST)
         if form.is_valid():
-            # Save the question
             comment = Comment(
                 geocache=geocache,
                 user=request.user,
@@ -113,12 +115,45 @@ def approve(request):
     return render(request, "approve.html", {"geocaches": geocaches})
 
 
+def search(request, text, role):
+    if(role == "admin"):
+        geocaches = Geocache.objects.filter(
+            Q(name__istartswith=text) | Q(name__icontains=text) | Q(name__iendswith=text)
+        )
+    else:
+        geocaches = Geocache.objects.filter(
+            Q(name__istartswith=text) | Q(name__icontains=text) | Q(name__iendswith=text), active = True
+        )
+    return render(request, "search.html", {"geocaches": geocaches})
+
+
 def checkoff(request, pk):
     geocache = get_object_or_404(Geocache, pk=pk)
+    if(geocache.declined ==True):
+        geocache.declined = False
     geocache.active = True
+    geocache.admin = request.user
+    geocache.admin_date = timezone.localtime(timezone.now())
     geocache.save()
     cache_url = reverse("cache") + f"?lat={geocache.lat}&lng={geocache.lng}"
     return HttpResponseRedirect(cache_url)
+
+
+def decline(request, pk):
+    geocache = get_object_or_404(Geocache, pk=pk)
+    cache_url = reverse("cache") + f"?lat={geocache.lat}&lng={geocache.lng}"
+    if request.method == "POST":
+        form = DeclineForm(request.POST)
+        if form.is_valid():
+            geocache.reason = form.cleaned_data["text"]
+            geocache.declined = True
+            geocache.active = False
+            geocache.admin = request.user
+            geocache.admin_date = timezone.localtime(timezone.now())
+            geocache.save()
+            return HttpResponseRedirect(cache_url)
+    form = DeclineForm()
+    return render(request, "decline.html", {"geocache": geocache, "form" : form})
 
 
 def find(request, pk):
@@ -129,7 +164,14 @@ def find(request, pk):
         timestamp=timezone.localtime(timezone.now()),
     )
     find.save()
+    request.user.find_count += 1
+    request.user.save()
     geocache.find_count += 1
     geocache.save()
     cache_url = reverse("cache") + f"?lat={geocache.lat}&lng={geocache.lng}"
     return HttpResponseRedirect(cache_url)
+
+
+def pending(request):
+    geocaches = Geocache.objects.filter(Q(active=False) | Q(admin_date__gte=timezone.now() - timedelta(hours=12)) ,cacher=request.user)
+    return render(request, "pending.html", {"geocaches": geocaches})
