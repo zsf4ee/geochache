@@ -5,3 +5,4 @@ django-heroku
 dj-database-url
 django-allauth
 whitenoise
+pillow

@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block title %}Profile{% endblock %}
+
+{% block content %}
+
+<h1>{{profile.first_name|title}} {{profile.last_name|title}}</h1>
+<span style="color: green; font-size: 1rem">Finds: {{profile.find_count|title}}</span>
+<br>
+<br>
+{% for geocache in geocaches %}
+<div class="geocache-box">
+    <h2>{{ geocache.name|title }}</h2>
+    <a class="btn btn-primary" href="{% url 'cache' %}?lat={{geocache.lat}}&lng={{geocache.lng}}">Go</a>
+</div>
+{% endfor %}
+
+<style>
+    .geocache-box {
+        border: 1px solid #ddd;
+        padding: 10px; 
+        background-color: #fff; 
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
+        margin-bottom: 20px; 
+        border-radius: 4px;
+    }
+</style>
+
+{% endblock %}

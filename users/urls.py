@@ -15,4 +15,6 @@ urlpatterns = [
     path("find/<int:pk>/", views.find, name="find"),
     path("search/<str:role>/<str:text>", views.search, name="search"),
     path("pending", views.pending, name="pending"),
+    path("leaderboard/<int:top>",views.leaderboard,name="leaderboard"),
+    path("profile/<int:pk>",views.profile,name="profile")
 ]
