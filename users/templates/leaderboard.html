@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block title %}Leaderboard{% endblock %}
+
+{% block content %}
+
+<h1>Leaderboard</h1>
+<a class="btn btn-outline-success" href="{% url 'leaderboard' top=1 %}">Cache King</a>
+<a class="btn btn-outline-success" href="{% url 'leaderboard' top=10 %}">Top 10</a>
+<a class="btn btn-outline-success" href="{% url 'leaderboard' top=25 %}">Top 25</a>
+
+<div id="base">
+    {% for userr in users %}
+    {% if user == userr %}
+    <a class="self-box-link" href="{% url 'profile' pk=userr.pk %}">
+        <div class="self-box">
+            <h2>{{ userr.first_name|title }} {{ userr.last_name|title }}</h2>
+            <h3>Finds: {{userr.find_count}}</h3>
+        </div>
+    </a>
+    {% else %}
+    <a class="self-box-link" href="{% url 'profile' pk=userr.pk %}">
+        <div class="user-box">
+            <h2>{{ userr.first_name|title }} {{ userr.last_name|title }}</h2>
+            <h3>Finds: {{userr.find_count}}</h3>
+        </div>
+    </a>
+    {% endif %}
+    {% endfor %}
+</div>
+
+<style>
+    .user-box {
+        border: 1px solid #ddd;
+        padding: 10px;
+        background-color: #fff;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+        border-radius: 4px;
+    }
+
+    .self-box {
+        border: 4px solid #228B22;
+        padding: 10px;
+        background-color: #228B22;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+        border-radius: 4px;
+    }
+
+    .self-box-link {
+        text-decoration: none;
+        color: inherit;
+        display: block;
+    }
+</style>
+
+{% endblock %}

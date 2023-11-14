@@ -6,11 +6,17 @@ from django.contrib.auth import get_user_model
 
 class User(AbstractUser):
     is_admin = models.BooleanField(default=False)
+    find_count = models.IntegerField(default=0)
+
 
 # Holds data for one instance of a Geocache
 class Geocache(models.Model):
     name = models.CharField(max_length=50)
     active = models.BooleanField(default= False)
+    declined = models.BooleanField(default= False)
+    reason = models.CharField(max_length=255, null=True)
+    admin = models.ForeignKey(User, on_delete = models.CASCADE,null=True, related_name='admin_geocaches')
+    admin_date = models.DateTimeField(null=True)
     cacher = models.ForeignKey(User, on_delete = models.CASCADE)
     find_count = models.IntegerField(default=0)
     cache_date = models.DateTimeField()
@@ -22,7 +28,7 @@ class Geocache(models.Model):
 
 
     def __str__(self):
-        return self.cacher.first_name + " " + self.cacher.last_name + "[" + self.name + "] : " + str(self.find_count) + " " + str(self.id)
+        return  "[" + self.name + "]" + "| Submitted By: " + self.cacher.first_name + " " + self.cacher.last_name + "| Found: " + str(self.find_count) + "| Id: " + str(self.id)
 
 # Holds data for one instance of geocache being found
 class Find(models.Model):
@@ -31,7 +37,7 @@ class Find(models.Model):
     timestamp = models.DateTimeField()
 
     def __str__(self):
-        return self.finder.first_name + " " + self.finder.last_name + " : " + str(self.timestamp)
+        return self.finder.first_name + " " + self.finder.last_name +  " : " + self.geocache + " : " + str(self.timestamp)
 
 
 class Comment(models.Model):

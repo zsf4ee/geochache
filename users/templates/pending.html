@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block title %}Pending Caches{% endblock %}
+
+{% block content %}
+
+<h1>Pending Caches</h1>
+<div id="base">
+    {% for geocache in geocaches %}
+    <div class="geocache-box">
+        <h2>{{ geocache.name|title }}</h2>
+        {% if geocache.active%}
+        <span style="color: green; font-size: 1rem">Approved by: {{geocache.admin|title}}</span>
+        <a class="btn btn-primary" href="{% url 'cache' %}?lat={{geocache.lat}}&lng={{geocache.lng}}">Go</a>
+        {% elif geocache.declined %}
+        <span style="color: red; font-size: 1rem">Declined by: {{geocache.admin|title}}</span>
+        <br>
+        <span style="color: black; font-size: 1rem">Reason: {{geocache.reason}}</span>
+        {% else %}
+        <span style="color: gray; font-size: 1rem">Pending..</span>
+        {% endif %}
+    </div>
+    {% endfor %}
+</div>
+
+<style>
+    .geocache-box {
+        border: 1px solid #ddd;
+        padding: 10px;
+        background-color: #fff;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+        border-radius: 4px;
+    }
+</style>
+
+{% endblock %}

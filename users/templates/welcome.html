@@ -10,12 +10,22 @@
             <img src="/static/images/favicon.svg" width="50" height="auto" alt="logo">
             <span class="fs-3 fw-bold">CAVGEO</span>
         </a>
-        <form class="col-12 col-lg-auto mb-3 me-2 ">
-            <input type="search" class="form-control" placeholder="Search caches" aria-label="Search">
+        <form id="searchForm" class="col-12 col-lg-auto mb-3 me-2 ">
+            <input id="searchInput" type="search" class="form-control" placeholder="Search caches" aria-label="Search">
         </form>
         <a class="btn btn-primary mb-4 px-4" href="{% url 'login' %}">Log in</a>
     </div>
 </header>
+
+<script>
+    document.getElementById('searchForm').onsubmit = function (event) {
+        event.preventDefault();
+        var searchText = document.getElementById('searchInput').value;
+        var role = "{{ user.is_admin }}" === "True" ? "admin" : "user";
+        var actionUrl = '/search/' + role + '/' + encodeURIComponent(searchText);
+        window.location.href = actionUrl;
+    };
+</script>
 
 <style>
     footer {
@@ -24,20 +34,18 @@
 
 
 
-    .icon {
-
-    }
+    .icon {}
 </style>
-{% comment %} 
+{% comment %}
 <header class="container d-flex">
     <span>
 
-    <img class="icon" src="/static/images/favicon.svg" width="50" alt="">
-    CAVGEO
-    <form action="">
-        <input type="search">
-    </form>
-    <button>Login</button>
+        <img class="icon" src="/static/images/favicon.svg" width="50" alt="">
+        CAVGEO
+        <form action="">
+            <input type="search">
+        </form>
+        <button>Login</button>
 
     </span>
 </header>
@@ -65,19 +73,20 @@
                 <h3>Create an account</h3>
                 <p>Create an account online or through the Geocaching® app to view a map of geocaches near you.</p>
             </div>
-    
+
             <!-- Step 2 -->
             <div class="col-md-4 text-center">
-                <img src="static/images/find_geocache.svg" class="center"width="100" alt="geocache image">
+                <img src="static/images/find_geocache.svg" class="center" width="100" alt="geocache image">
                 <h3>Find a geocache</h3>
                 <p>Use the app to navigate to a geocache nearby. Don't forget to bring a pen!</p>
             </div>
-    
+
             <!-- Step 3 -->
             <div class="col-md-4 text-center">
                 <img src="static/images/leaderboard.svg" width="100" alt="leaderboard image">
                 <h3>Compete with your friends</h3>
-                <p>Once you find a geocache, you will be rewarded with points. Rack them up and make a name for yourself on the leaderboard!</p>
+                <p>Once you find a geocache, you will be rewarded with points. Rack them up and make a name for yourself
+                    on the leaderboard!</p>
             </div>
         </div>
     </div>
