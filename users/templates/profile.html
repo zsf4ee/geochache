@@ -5,6 +5,9 @@
 {% block content %}
 
 <h1>{{profile.first_name|title}} {{profile.last_name|title}}</h1>
+
+{% if user.is_admin %}You are an admin user.{% endif %}
+
 <span style="color: green; font-size: 1rem">Finds: {{profile.find_count|title}}</span>
 <br>
 <br>

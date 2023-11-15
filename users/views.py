@@ -42,10 +42,13 @@ def geocache_add(request):
                 lat=latitude,
                 lng=longitude,
                 description=form.cleaned_data["description"],
-                hint=form.cleaned_data["hint"],
+                password=form.cleaned_data["password"],
                 radius=form.cleaned_data["radius"],
             )
             geocache.save()
+            
+            # TODO: Create hint here
+            
             return redirect("catalog")
         else:
             print(form.errors)

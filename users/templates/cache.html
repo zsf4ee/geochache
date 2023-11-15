@@ -111,6 +111,13 @@
             <p>Placed by: {{ geocache.cacher.first_name }} {{ geocache.cacher.last_name }}</p>
             <p>Description: {{ geocache.description }}</p>
             <p>Hint: {{ geocache.hint }}</p>
+            {% if geocache.password != "" %}
+                {% if geocache.cacher == user %}
+                    <p>Password: {{ geocache.password }}</p>
+                {% else %}
+                    <p>Password Protected</p>
+                {% endif %}
+            {% endif %}
             <p>Found {{ geocache.find_count }} times</p>
             {% if not geocache.declined %}
             <a class="btn btn-primary" href="{% url 'find' pk=geocache.pk %}">Report Find</a>
