@@ -23,7 +23,6 @@ class Geocache(models.Model):
     lat = models.DecimalField( max_digits=10, decimal_places=8)
     lng = models.DecimalField( max_digits=11, decimal_places=8)
     description = models.CharField(max_length=500)
-    hint = models.CharField(max_length=150, null=True, blank=True)
     radius = models.IntegerField(null=True)
 
 
@@ -45,6 +44,10 @@ class Comment(models.Model):
     user = models.ForeignKey(User, on_delete= models.CASCADE)
     text = models.CharField(max_length=255)
     date = models.DateTimeField()
+
+class Hint(models.Model):
+    geocache = models.ForeignKey(Geocache, on_delete= models.CASCADE,null=False, related_name="hints")
+    text = models.CharField(max_length=150, null=False, blank=False)
 
 
 
