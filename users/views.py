@@ -1,5 +1,6 @@
 from datetime import timedelta
 from django.http import HttpResponseNotFound, HttpResponseRedirect, JsonResponse
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.auth import logout
 from django.urls import reverse
@@ -14,18 +15,20 @@ from .forms import *
 
 
 def welcome(request):
+    if request.user.is_authenticated:
+        return redirect("catalog")
     return render(request, "welcome.html")
 
 
 def login_view(request):
     return render(request, "login.html")
 
-
+@login_required
 def logout_view(request):
     logout(request)
-    return render(request, "login.html")
+    return render(request, "welcome.html")
 
-
+@login_required
 def geocache_add(request):
     if request.method == "POST":
         form = GeoCacheForm(request.POST)
@@ -52,11 +55,11 @@ def geocache_add(request):
 
     return render(request, "add.html", {"form": form})
 
-
+@login_required
 def catalog(request):
     return render(request, "catalog.html")
 
-
+@login_required
 def geocaches_within_bounds(request):
     ne_lat = request.GET.get("ne_lat")
     ne_lng = request.GET.get("ne_lng")
@@ -72,7 +75,7 @@ def geocaches_within_bounds(request):
     else:
         return HttpResponseNotFound("No geocaches found.")
 
-
+@login_required
 def cache(request):
     lat = request.GET.get("lat")
     lng = request.GET.get("lng")
@@ -109,12 +112,15 @@ def cache(request):
 
     return render(request, "cache.html", context)
 
-
+@login_required
 def approve(request):
-    geocaches = Geocache.objects.filter(active=False)
-    return render(request, "approve.html", {"geocaches": geocaches})
+    if not request.user.is_authenticated:
+        return redirect("catalog")
+    else: 
+        geocaches = Geocache.objects.filter(active=False)
+        return render(request, "approve.html", {"geocaches": geocaches})
 
-
+@login_required
 def search(request, text, role):
     if role == "admin":
         geocaches = Geocache.objects.filter(
@@ -131,7 +137,7 @@ def search(request, text, role):
         )
     return render(request, "search.html", {"geocaches": geocaches})
 
-
+@login_required
 def checkoff(request, pk):
     geocache = get_object_or_404(Geocache, pk=pk)
     if geocache.declined == True:
@@ -143,7 +149,7 @@ def checkoff(request, pk):
     cache_url = reverse("cache") + f"?lat={geocache.lat}&lng={geocache.lng}"
     return HttpResponseRedirect(cache_url)
 
-
+@login_required
 def decline(request, pk):
     geocache = get_object_or_404(Geocache, pk=pk)
     cache_url = reverse("cache") + f"?lat={geocache.lat}&lng={geocache.lng}"
@@ -160,7 +166,7 @@ def decline(request, pk):
     form = DeclineForm()
     return render(request, "decline.html", {"geocache": geocache, "form": form})
 
-
+@login_required
 def find(request, pk):
     geocache = get_object_or_404(Geocache, pk=pk)
     find = Find(
@@ -176,7 +182,7 @@ def find(request, pk):
     cache_url = reverse("cache") + f"?lat={geocache.lat}&lng={geocache.lng}"
     return HttpResponseRedirect(cache_url)
 
-
+@login_required
 def pending(request):
     geocaches = Geocache.objects.filter(
         Q(active=False) | Q(admin_date__gte=timezone.now() - timedelta(hours=12)),
@@ -184,13 +190,14 @@ def pending(request):
     )
     return render(request, "pending.html", {"geocaches": geocaches})
 
-
+@login_required
 def leaderboard(request, top):
     users = User.objects.filter().order_by("-find_count")[:top]
     return render(request, "leaderboard.html", {"users": users})
 
-
+@login_required
 def profile(request, pk):
     profile = get_object_or_404(User, pk=pk)
     geocaches = Geocache.objects.filter(active=True, cacher=profile)
     return render(request, "profile.html", {"profile": profile, "geocaches": geocaches})
+
