@@ -6,6 +6,8 @@
 
 <h1>Pending Caches</h1>
 <div id="base">
+   
+
     {% for geocache in geocaches %}
     <div class="geocache-box">
         <h2>{{ geocache.name|title }}</h2>
@@ -20,7 +22,11 @@
         <span style="color: gray; font-size: 1rem">Pending..</span>
         {% endif %}
     </div>
+    {% empty %}
+    <h4 style="color: gray;"> No Pending Caches....</h4>
     {% endfor %}
+
+
 </div>
 
 <style>
