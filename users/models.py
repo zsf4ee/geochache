@@ -13,6 +13,7 @@ class User(AbstractUser):
 class Geocache(models.Model):
     name = models.CharField(max_length=50)
     active = models.BooleanField(default= False)
+    password = models.CharField(max_length = 50, default="")
     declined = models.BooleanField(default= False)
     reason = models.CharField(max_length=255, null=True)
     admin = models.ForeignKey(User, on_delete = models.CASCADE,null=True, related_name='admin_geocaches')
@@ -51,6 +52,3 @@ class Hint(models.Model):
     geocache = models.ForeignKey(Geocache, on_delete= models.CASCADE,null=False, related_name="hints")
     text = models.CharField(max_length=150, null=False, blank=False)
 
-
-
-    

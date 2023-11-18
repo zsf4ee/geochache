@@ -15,17 +15,6 @@
     {% load static %}
 </head>
 
-<nav class="navbar navbar-expand-lg navbar-light">
-    <a class="btn btn-outline-success navbar-brand " href="{% url 'add' %}">New GeoCache</a>
-    <a class="btn btn-outline-success navbar-brand" href="{% url 'catalog' %}">Cache Center</a>
-    <a class="btn btn-outline-success navbar-brand" href="{% url 'pending' %}">Pending Caches</a>
-    <a class="btn btn-outline-success navbar-brand" href="{% url 'leaderboard' top=1 %}">Leaderboard</a>
-    {% if user.is_admin %}
-        <a class="btn btn-outline-success navbar-brand" href="{% url 'approve' %}">Approve</a>
-    {% endif %}
-    <a class="btn btn-outline-success navbar-brand" href="{% url 'logout' %}">Logout</a>
-</nav>
-
 <body>
     {% block content %}{% endblock %}
 </body>
