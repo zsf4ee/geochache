@@ -12,3 +12,6 @@ class CommentForm(forms.Form):
 
 class DeclineForm(forms.Form):
     text = forms.CharField(label='Reasoning:', max_length=255)
+
+class FindForm(forms.Form):
+    text = forms.CharField(label='Password:', max_length=12)

@@ -39,7 +39,6 @@ def geocache_add(request):
                 lat=latitude,
                 lng=longitude,
                 description=form.cleaned_data["description"],
-                hint=form.cleaned_data["hint"],
                 radius=form.cleaned_data["radius"],
             )
             geocache.save()
@@ -161,7 +160,7 @@ def decline(request, pk):
     return render(request, "decline.html", {"geocache": geocache, "form": form})
 
 
-def find(request, pk):
+def find(request, pk, text):
     geocache = get_object_or_404(Geocache, pk=pk)
     find = Find(
         finder=request.user,

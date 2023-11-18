@@ -24,6 +24,7 @@ class Geocache(models.Model):
     lng = models.DecimalField( max_digits=11, decimal_places=8)
     description = models.CharField(max_length=500)
     radius = models.IntegerField(null=True)
+    password = models.CharField(max_length=12)
 
 
     def __str__(self):
@@ -34,6 +35,7 @@ class Find(models.Model):
     finder = models.ForeignKey(User, on_delete= models.CASCADE)
     geocache = models.ForeignKey(Geocache, on_delete= models.CASCADE)
     timestamp = models.DateTimeField()
+    hint_count = models.IntegerField(default =0)
 
     def __str__(self):
         return self.finder.first_name + " " + self.finder.last_name +  " : " + self.geocache + " : " + str(self.timestamp)
