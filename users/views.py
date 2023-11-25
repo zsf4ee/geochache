@@ -49,7 +49,7 @@ def geocache_add(request):
             
             # TODO: Create hint here
             
-            return redirect("catalog")
+            return redirect("pending")
         else:
             print(form.errors)
 
@@ -202,5 +202,6 @@ def leaderboard(request, top):
 def profile(request, pk):
     profile = get_object_or_404(User, pk=pk)
     geocaches = Geocache.objects.filter(active=True, cacher=profile)
-    return render(request, "profile.html", {"profile": profile, "geocaches": geocaches})
+    finds = Find.objects.filter(finder=profile)
+    return render(request, "profile.html", {"profile": profile, "geocaches": geocaches, "finds": finds})
 

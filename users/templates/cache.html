@@ -94,21 +94,26 @@
             <h1>
                 {{ geocache.name|title }}
                 {% if user.is_admin %}
-                {% if not geocache.active and not geocache.declined %}
-                <a class="btn btn-primary" href="{% url 'checkoff' pk=geocache.pk %}">Approve</a>
-                <a class="btn btn-warning" href="{% url 'decline' pk=geocache.pk %}">Decline</a>
-                {% elif geocache.declined %}
-                <a class="btn btn-primary" href="{% url 'checkoff' pk=geocache.pk %}">Approve</a>
-                <span style="color: red; font-size: 1rem">Declined by: {{geocache.admin|title}}</span>
-                {% elif not geocache.declined %}
-                <a class="btn btn-warning" href="{% url 'decline' pk=geocache.pk %}">Decline</a>
-                <span style="color: green; font-size: 1rem">Approved by: {{geocache.admin|title}}</span>
-                {% endif %}
+                    {% if not geocache.active and not geocache.declined %}
+                        <a class="btn btn-primary" href="{% url 'checkoff' pk=geocache.pk %}">Approve</a>
+                        <a class="btn btn-warning" href="{% url 'decline' pk=geocache.pk %}">Decline</a>
+                    {% elif geocache.declined %}
+                        <a class="btn btn-primary" href="{% url 'checkoff' pk=geocache.pk %}">Approve</a>
+                        <br/>
+                        <span style="color: red; font-size: 1rem">Declined by {{geocache.admin|title}}</span>
+                    {% elif not geocache.declined %}
+                        <a class="btn btn-warning" href="{% url 'decline' pk=geocache.pk %}">Decline</a>
+                        <br/>
+                        <span style="color: green; font-size: 1rem">Approved by {{geocache.admin|title}}</span>
+                    {% endif %}
                 {% endif %}
             </h1>
             
-            <p>Placed on: {{ geocache.cache_date }}
-            <p>Placed by: {{ geocache.cacher.first_name }} {{ geocache.cacher.last_name }}</p>
+            <div>
+
+            </div>
+            <p>Placed on {{ geocache.cache_date }}
+            <p>Placed by {{ geocache.cacher.first_name }} {{ geocache.cacher.last_name }}</p>
             <p>Description: {{ geocache.description }}</p>
             <p>Hint: {{ geocache.hint }}</p>
             {% if geocache.password != "" %}
@@ -119,9 +124,12 @@
                 {% endif %}
             {% endif %}
             <p>Found {{ geocache.find_count }} times</p>
+
             {% if not geocache.declined %}
-            <a class="btn btn-primary" href="{% url 'find' pk=geocache.pk %}">Report Find</a>
+                <a class="btn btn-primary" href="{% url 'find' pk=geocache.pk %}">Log Find</a>
+                <br/>
             {% endif %}
+            
             <div id="map" style="height: 500px; width: 60%; align-self: center;"></div>
             <h2>Finds</h2>
             <div class="list-group">
