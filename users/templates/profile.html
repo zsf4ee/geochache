@@ -5,24 +5,43 @@
 {% block content %}
 
 <h1>{{profile.first_name|title}} {{profile.last_name|title}}</h1>
-<span style="color: green; font-size: 1rem">Finds: {{profile.find_count|title}}</span>
-<br>
-<br>
-{% for geocache in geocaches %}
-<div class="geocache-box">
-    <h2>{{ geocache.name|title }}</h2>
-    <a class="btn btn-primary" href="{% url 'cache' %}?lat={{geocache.lat}}&lng={{geocache.lng}}">Go</a>
-</div>
-{% endfor %}
 
+{% if user.is_admin %}You are an admin user.</br>{% endif %}
+<br>
+<div class="container">
+    <div class="column">
+        <h2>Geocaches</h2>
+        {% for geocache in geocaches %}
+            <div class="card">
+                <h3><a href="{% url 'cache' %}?lat={{geocache.lat}}&lng={{geocache.lng}}">{{geocache.name|title }}</a></h3>
+            </div>
+        {% empty %}
+            <span class="italic" style="color: gray">You haven't made any geocaches yet.</span>
+        {% endfor %}
+    </div>
+
+    <div class="column">
+        <h2>Finds ({{profile.find_count|title}})</h2>
+        {% for find in finds %}
+            <div class="card">
+                <h3><a href="{% url 'cache' %}?lat={{find.geocache.lat}}&lng={{find.geocache.lng}}">{{ find.geocache.name|title }}</a></h3>
+            </div>
+
+        {% empty %}
+            <span class="italic" style="color: gray">You haven't found any geocaches yet.</span>
+        {% endfor %}
+    </div>
+</div>
 <style>
-    .geocache-box {
-        border: 1px solid #ddd;
-        padding: 10px; 
-        background-color: #fff; 
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
-        margin-bottom: 20px; 
-        border-radius: 4px;
+
+
+    .column {
+        width: 24rem;
+    }
+
+    .container {
+        display: flex;
+        justify-content: space-between;
     }
 </style>
 

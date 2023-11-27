@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+
+{% block title %} Hints {% endblock %}
+
+{% block content %}
+
+<style>
+    .container {
+        width: 80%;
+        margin: auto;
+        padding: 20px;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+        border-radius: 5px;
+        background-color: #f2f2f2;
+    }
+
+    h2,
+    h3 {
+        color: #333;
+    }
+
+    form {
+        margin-top: 20px;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    label {
+        display: block;
+        margin-bottom: 5px;
+    }
+
+    input[type="text"],
+    textarea {
+        width: 100%;
+        padding: 12px 20px;
+        margin: 8px 0;
+        display: inline-block;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+    }
+
+    .btn-primary {
+        width: 100%;
+        background-color: #4CAF50;
+        color: white;
+        padding: 14px 20px;
+        margin: 8px 0;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    .btn-primary:hover {
+        background-color: #45a049;
+    }
+
+    ul {
+        list-style-type: none;
+        padding: 0;
+    }
+
+    li {
+        padding: 8px;
+        background-color: #ddd;
+        margin-top: 5px;
+        border-radius: 4px;
+    }
+</style>
+
+<div class="container">
+    <h2>Add a Hint for Geocache: {{ geocache.name|title }}</h2>
+
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            {{ form.text.label_tag }}
+            {{ form.text }}
+        </div>
+        <button type="submit" class="btn btn-primary">Add Hint</button>
+    </form>
+
+    {% if hints %}
+    <h3>Existing Hints:</h3>
+    <ul>
+        {% for hint in hints %}
+        <li>{{ hint.text }}</li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <p>No hints added yet.</p>
+    {% endif %}
+    <a class="btn btn-primary" href="{% url 'cache' %}?lat={{geocache.lat}}&lng={{geocache.lng}}">Back to cache</a>
+</div>
+
+{% endblock %}

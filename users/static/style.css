@@ -4,7 +4,8 @@ body {
     height: 100%;
     padding: 2rem;
     margin: 0rem auto;
-    max-width: 48rem;
+    max-width: 64rem;
+    font-size: 1.2rem;
 } 
 
 .btn-primary {
@@ -12,9 +13,28 @@ body {
     border-color: #513523;
     height: auto;
 }
+.navbar {
+    padding-bottom: 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.navbar * {
+    padding-left: 1rem;
+    padding-right: 1rem;
+    border: 0;
+}
+
+.navbar img {
+    padding: 0;
+}
+
+.title {
+    padding-left: 0;
+}
 
 footer {
-    position: relative;
     bottom: 0;
     left: 0;
     right: 0;
@@ -27,4 +47,40 @@ footer {
     display: block;
     margin-left: auto;
     margin-right: auto;
+}
+
+.gray {
+    color: gray
+}
+
+.card {
+    width: 24rem;
+    border: 0.25rem black; 
+    background-color: white; 
+    text-decoration: none;
+    box-shadow: 0 0.1rem 0.4rem lightblue;
+    border-radius: 0.5rem;
+    margin-top: 1.5rem;
+    margin-bottom: 1.5rem;
+    padding: 0.5rem;
+    transition: box-shadow 0.5s;
+}
+
+.card * {
+    text-decoration: none;
+    color: inherit;
+}
+
+.card:hover {
+    box-shadow: 0 0.3rem 0.4rem lightblue;
+    transition: box-shadow 0.5s;
+}
+
+
+a {
+    transition: font 0.5s;
+}
+.card a:hover {
+    font-size: 105%;
+    transition: font 0.5s;
 }

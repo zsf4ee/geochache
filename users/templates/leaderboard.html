@@ -5,53 +5,47 @@
 {% block content %}
 
 <h1>Leaderboard</h1>
-<a class="btn btn-outline-success" href="{% url 'leaderboard' top=1 %}">Cache King</a>
-<a class="btn btn-outline-success" href="{% url 'leaderboard' top=10 %}">Top 10</a>
-<a class="btn btn-outline-success" href="{% url 'leaderboard' top=25 %}">Top 25</a>
-
+<br>
 <div id="base">
-    {% for userr in users %}
-    {% if user == userr %}
-    <a class="self-box-link" href="{% url 'profile' pk=userr.pk %}">
-        <div class="self-box">
-            <h2>{{ userr.first_name|title }} {{ userr.last_name|title }}</h2>
-            <h3>Finds: {{userr.find_count}}</h3>
-        </div>
-    </a>
-    {% else %}
-    <a class="self-box-link" href="{% url 'profile' pk=userr.pk %}">
-        <div class="user-box">
-            <h2>{{ userr.first_name|title }} {{ userr.last_name|title }}</h2>
-            <h3>Finds: {{userr.find_count}}</h3>
-        </div>
-    </a>
-    {% endif %}
-    {% endfor %}
+    <table  border=1 frame=void rules=rows >
+        <colgroup>
+            <col span="1" style="width: 15%;">
+            <col span="1" style="width: 70%;">
+            <col span="1" style="width: 15%;">
+         </colgroup>
+    
+         
+        <tr class="table-header">
+            <th>Rank</th>
+            <th>Name</th>
+            <th style="text-align: right;">Finds</th>
+        </tr>
+        {% for u in users %}     
+            <tr>
+                <th>{{ forloop.counter }}</th>
+                <th> 
+                    <a href="{% url 'profile' pk=u.pk %}">{{ u.first_name|title }} {{ u.last_name|title }}</a>
+                </th>
+                <th style="text-align: right;">{{u.find_count}}</th>
+            </tr>
+        {% endfor %}
+    </table>
 </div>
 
 <style>
-    .user-box {
-        border: 1px solid #ddd;
-        padding: 10px;
-        background-color: #fff;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        margin-bottom: 20px;
-        border-radius: 4px;
+    table {
+        width: 100%;
+        table-layout: fixed;
+        overflow-wrap: break-word;
+        font-size: 1.5rem;
     }
 
-    .self-box {
-        border: 4px solid #228B22;
-        padding: 10px;
-        background-color: #228B22;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        margin-bottom: 20px;
-        border-radius: 4px;
-    }
-
-    .self-box-link {
+    a {
         text-decoration: none;
-        color: inherit;
-        display: block;
+    }
+
+    .table-header{
+        color: gray;
     }
 </style>
 

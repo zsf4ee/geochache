@@ -100,14 +100,14 @@
 
 <style>
     #map {
-        width: 24rem;
-        height: 24rem;
+        width: 48rem;
+        height: 48rem;
         margin-bottom: 1rem;
         flex: 75%;
     }
     .container {
         display: flex;
-        align-items: center;
+        justify-content: space-between;
     }
 
     .column {
@@ -128,12 +128,17 @@
             <br>
             {{ form.hint.label_tag }} {{ form.hint }}
             <br>
-            {{ form.location }}
+            {{ form.password.label_tag }} {{ form.password }}
             <br>
-            {{ form.radius }}
-            <label>Radius:</label>
+            {{ form.location }}
+            
+            {{ form.radius.label_tag }} {{ form.radius }}
+
             <input id="slide" type="range" min="1" max="200" value="50">
-            <button type="submit">Submit</button>
+
+            <br><br>
+
+            <button class="btn btn-success" type="submit">Submit</button>
         </form>
     </div>
 </div>

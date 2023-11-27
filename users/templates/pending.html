@@ -5,22 +5,32 @@
 {% block content %}
 
 <h1>Pending Caches</h1>
+
+<br/>
+<h4 class="gray">These are geocaches you made that are still waiting for approval. When an admin approves them, they will be publically available.</h3>
+<br/>
+
 <div id="base">
+
     {% for geocache in geocaches %}
-    <div class="geocache-box">
-        <h2>{{ geocache.name|title }}</h2>
+    <div class="card">
+        <h2><a href="{% url 'cache' %}?lat={{geocache.lat}}&lng={{geocache.lng}}">{{ geocache.name|title }}</a></h2>
+
         {% if geocache.active%}
-        <span style="color: green; font-size: 1rem">Approved by: {{geocache.admin|title}}</span>
-        <a class="btn btn-primary" href="{% url 'cache' %}?lat={{geocache.lat}}&lng={{geocache.lng}}">Go</a>
+        <span style="color: green; font-size: 1rem">Approved by {{geocache.admin|title}}</span>
+        
         {% elif geocache.declined %}
-        <span style="color: red; font-size: 1rem">Declined by: {{geocache.admin|title}}</span>
-        <br>
+        <span style="color: red; font-size: 1rem">Declined by {{geocache.admin|title}}</span>
         <span style="color: black; font-size: 1rem">Reason: {{geocache.reason}}</span>
         {% else %}
         <span style="color: gray; font-size: 1rem">Pending..</span>
         {% endif %}
     </div>
+    {% empty %}
+    <h4 style="color: gray;"> No pending caches... Go make some!</h4>
     {% endfor %}
+
+
 </div>
 
 <style>

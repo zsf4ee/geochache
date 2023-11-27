@@ -1,8 +1,10 @@
-{% extends "base.html" %}
+{% extends "base_without_header.html" %}
 
 {% block title %}CavGeo{% endblock %}
 
 {% block content %}
+
+{% load socialaccount %}
 
 <header class="py-3 mb-4 border-bottom">
     <div class="container d-flex flex-wrap justify-content-center">
@@ -13,7 +15,7 @@
         <form id="searchForm" class="col-12 col-lg-auto mb-3 me-2 ">
             <input id="searchInput" type="search" class="form-control" placeholder="Search caches" aria-label="Search">
         </form>
-        <a class="btn btn-primary mb-4 px-4" href="{% url 'login' %}">Log in</a>
+        <a class="btn btn-primary mb-4 px-4" href="{% provider_login_url 'google' %}?next=/catalog">Login</a>
     </div>
 </header>
 
