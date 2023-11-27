@@ -142,6 +142,9 @@ def cache(request):
     hints = [hint.text for hint in Hint.objects.filter(geocache=geocache)]
     print(hints)
     user_has_find = any(request.user == find.finder for find in finds)
+    has_password = len(geocache.password) > 0
+    has_hints = len(hints) > 0
+    
     context = {
         "geocache": geocache,
         "finds": finds,
@@ -149,6 +152,8 @@ def cache(request):
         "user_has_find": user_has_find,
         "form": form,
         "hints": hints,
+        "has_password": has_password,
+        "has_hints": has_hints
     }
 
     return render(request, "cache.html", context)
@@ -212,7 +217,7 @@ def decline(request, pk):
     return render(request, "decline.html", {"geocache": geocache, "form": form})
 
 
-def find(request, pk, text):
+def find_with_password(request, pk, text):
     geocache = get_object_or_404(Geocache, pk=pk)
     if text == geocache.password:
         find = Find(
@@ -231,6 +236,27 @@ def find(request, pk, text):
     cache_url = reverse("cache") + f"?lat={geocache.lat}&lng={geocache.lng}"
     return HttpResponseRedirect(cache_url)
 
+def find_without_password(request, pk):
+    geocache = get_object_or_404(Geocache, pk=pk)
+    
+    if len(geocache.password) == 0:
+        print("gewrasdfa")
+        find = Find(
+            finder=request.user,
+            geocache=geocache,
+            timestamp=timezone.localtime(timezone.now()),
+        )
+        find.save()
+        request.user.find_count += 1
+        request.user.save()
+        geocache.find_count += 1
+        geocache.save()
+        messages.success(request, "Find Registered!!")
+    else:
+        messages.error(request, "Please enter the correct password to log your find.")
+        
+    cache_url = reverse("cache") + f"?lat={geocache.lat}&lng={geocache.lng}"
+    return HttpResponseRedirect(cache_url)
 
 @login_required
 def pending(request):
@@ -251,10 +277,6 @@ def leaderboard(request, top):
 def profile(request, pk):
     profile = get_object_or_404(User, pk=pk)
     geocaches = Geocache.objects.filter(active=True, cacher=profile)
-<<<<<<< HEAD
-    return render(request, "profile.html", {"profile": profile, "geocaches": geocaches})
-=======
     finds = Find.objects.filter(finder=profile)
     return render(request, "profile.html", {"profile": profile, "geocaches": geocaches, "finds": finds})
 
->>>>>>> 1995c0e4ef4cc0787d791a98798b359e739df5d2

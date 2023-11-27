@@ -113,8 +113,7 @@
         {% if messages %}
         <ul class="messages">
             {% for message in messages %}
-            <li style="list-style-type: none;" {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message
-                }}</li>
+            <li style="list-style-type: none;" {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
             {% endfor %}
         </ul>
         {% endif %}
@@ -122,23 +121,6 @@
             <h1>
                 {{ geocache.name|title }}
                 {% if user.is_admin %}
-<<<<<<< HEAD
-                {% if not geocache.active and not geocache.declined and geocache %}
-                <a class="btn btn-primary" href="{% url 'checkoff' pk=geocache.pk %}">Approve</a>
-                <a class="btn btn-warning" href="{% url 'decline' pk=geocache.pk %}">Decline</a>
-                {% elif geocache.declined %}
-                <a class="btn btn-primary" href="{% url 'checkoff' pk=geocache.pk %}">Approve</a>
-                <span style="color: red; font-size: 1rem">Declined by: {{geocache.admin|title}}</span>
-                {% elif not geocache.declined and geocache %}
-                <a class="btn btn-warning" href="{% url 'decline' pk=geocache.pk %}">Decline</a>
-                <span style="color: green; font-size: 1rem">Approved by: {{geocache.admin|title}}</span>
-                {% endif %}
-                {% endif %}
-            </h1>
-
-            <p>Placed on: {{ geocache.cache_date }}
-            <p>Placed by: {{ geocache.cacher.first_name }} {{ geocache.cacher.last_name }}</p>
-=======
                     {% if not geocache.active and not geocache.declined %}
                         <a class="btn btn-primary" href="{% url 'checkoff' pk=geocache.pk %}">Approve</a>
                         <a class="btn btn-warning" href="{% url 'decline' pk=geocache.pk %}">Decline</a>
@@ -159,7 +141,6 @@
             </div>
             <p>Placed on {{ geocache.cache_date }}
             <p>Placed by {{ geocache.cacher.first_name }} {{ geocache.cacher.last_name }}</p>
->>>>>>> 1995c0e4ef4cc0787d791a98798b359e739df5d2
             <p>Description: {{ geocache.description }}</p>
             {% if geocache.password != "" %}
             {% if geocache.cacher == user %}
@@ -167,7 +148,6 @@
             {% endif %}
             {% endif %}
             <p>Found {{ geocache.find_count }} times</p>
-<<<<<<< HEAD
             <div id="hintContainer"></div>
             <button id="showHintButton" class="btn btn-primary">Show Hint</button>
 
@@ -189,45 +169,41 @@
             </script>
 
 
-
-
             {% if not geocache.declined %}
-            <form id="findForm" class="col-12 col-lg-auto mb-3 me-2 ">
-                <input id="findInput" type="search" class="form-control" placeholder="Cache Password"
-                    aria-label="Search">
-            </form>
-            <a class="btn btn-primary" id="reportFindButton" href="#">Report Find</a>
+                {% if has_password %}
+                    <form id="findForm" class="col-12 col-lg-auto mb-3 me-2 ">
+                        <input id="findInput" type="search" class="form-control" placeholder="Cache Password"
+                            aria-label="Search">
+                    </form>
+                {% endif %}
 
-            <script>
-                document.getElementById('findForm').onsubmit = function (event) {
-                    event.preventDefault();
-                    var password = document.getElementById('findInput').value;
-                    var pk = parseInt("{{ geocache.pk }}");
-                    var actionUrl = '/find/' + pk + '/' + encodeURIComponent(password);
-                    window.location.href = actionUrl;
-                };
+                <button class="btn btn-primary" id="reportFindButton">Log Find</button>
 
-                document.getElementById('reportFindButton').onclick = function (event) {
-                    event.preventDefault();
-                    var password = document.getElementById('findInput').value;
-                    var pk = parseInt("{{ geocache.pk }}");
-                    var actionUrl = '/find/' + pk + '/' + encodeURIComponent(password);
-                    window.location.href = actionUrl;
-                };
+                <script>
+                    let handleSubmit = function (event) {
+                        event.preventDefault();
+                        let pk = {{ geocache.pk }};
 
-            </script>
+                        let findInput = document.getElementById('findInput');
+                        let password = "";
+                        if (findInput) password = findInput.value;
+
+                        if(password.length > 0) {
+                            window.location.href = '/find/' + pk + '/' + encodeURIComponent(password);
+                        } else {
+                            window.location.href = '/find/' + pk;
+                        }
+                    }
+
+                    let findForm = document.getElementById('findForm');
+                    if(findForm) findForm.onsubmit = handleSubmit;
+
+                    document.getElementById('reportFindButton').onclick = handleSubmit;
+
+                </script>
 
             {% endif %}
 
-
-=======
-
-            {% if not geocache.declined %}
-                <a class="btn btn-primary" href="{% url 'find' pk=geocache.pk %}">Log Find</a>
-                <br/>
-            {% endif %}
-            
->>>>>>> 1995c0e4ef4cc0787d791a98798b359e739df5d2
             <div id="map" style="height: 500px; width: 60%; align-self: center;"></div>
 
 
