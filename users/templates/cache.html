@@ -23,9 +23,6 @@
             draggable: false
         });
 
-        console.log(radius);
-        console.log(typeof radius);
-
         marker = new google.maps.Circle({
             strokeColor: '#097969',
             strokeOpacity: 0.8,
@@ -70,23 +67,6 @@
         margin-top: 20px;
     }
 
-    .card {
-        margin-bottom: 10px;
-        border: 1px solid #513523;
-    }
-
-    .card-header {
-        background-color: #7f5539;
-        font-weight: bold;
-    }
-
-    .card-body {
-        background-color: #ffffff;
-    }
-
-    .card-text {
-        color: #333;
-    }
 
     .messages {
         margin: 10px 0;
@@ -106,6 +86,45 @@
         border-color: #d6e9c6;
         color: #3c763d;
     }
+
+
+    #findForm {
+        display: inline;
+        width: 16rem;
+    }
+
+    #reportFindButton {
+        display: inline;
+    }
+
+    #map {
+        height: 24rem; 
+        width: 32rem; 
+        align-self: center;
+
+        margin-left: 2rem;
+    }
+
+    .split {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 1rem;
+    }
+
+    .info {
+        position: relative;
+    }
+    .loggingContainer {
+        position: absolute;
+        bottom: 0;
+        whitespace: no-break;
+        overflow: hidden;
+        display: inline-block;
+        width: 100%;
+    }
+    #showHintButton {
+        margin-right: 1rem;
+    }
 </style>
 
 <body onload="initMap()">
@@ -113,161 +132,136 @@
         {% if messages %}
         <ul class="messages">
             {% for message in messages %}
-            <li style="list-style-type: none;" {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message
-                }}</li>
+            <li style="list-style-type: none;" {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
             {% endfor %}
         </ul>
         {% endif %}
-        <div>
-            <h1>
-                {{ geocache.name|title }}
-                {% if user.is_admin %}
-<<<<<<< HEAD
-                {% if not geocache.active and not geocache.declined and geocache %}
-                <a class="btn btn-primary" href="{% url 'checkoff' pk=geocache.pk %}">Approve</a>
-                <a class="btn btn-warning" href="{% url 'decline' pk=geocache.pk %}">Decline</a>
-                {% elif geocache.declined %}
-                <a class="btn btn-primary" href="{% url 'checkoff' pk=geocache.pk %}">Approve</a>
-                <span style="color: red; font-size: 1rem">Declined by: {{geocache.admin|title}}</span>
-                {% elif not geocache.declined and geocache %}
-                <a class="btn btn-warning" href="{% url 'decline' pk=geocache.pk %}">Decline</a>
-                <span style="color: green; font-size: 1rem">Approved by: {{geocache.admin|title}}</span>
-                {% endif %}
-                {% endif %}
-            </h1>
+        <div class="split">
+            <div class="info">
+                <h1>
+                    {{ geocache.name|title }}
+                    {% if user.is_admin %}
+                        {% if not geocache.active and not geocache.declined %}
+                            <a class="btn btn-primary" href="{% url 'checkoff' pk=geocache.pk %}">Approve</a>
+                            <a class="btn btn-warning" href="{% url 'decline' pk=geocache.pk %}">Decline</a>
+                        {% elif geocache.declined %}
+                            <a class="btn btn-primary" href="{% url 'checkoff' pk=geocache.pk %}">Approve</a>
+                            <br/>
+                            <span style="color: red; font-size: 1rem">Declined by {{geocache.admin|title}}</span>
+                        {% elif not geocache.declined %}
+                            <a class="btn btn-warning" href="{% url 'decline' pk=geocache.pk %}">Decline</a>
+                            <br/>
+                            <span style="color: green; font-size: 1rem">Approved by {{geocache.admin|title}}</span>
+                        {% endif %}
+                    {% endif %}
+                </h1>
+                
 
-            <p>Placed on: {{ geocache.cache_date }}
-            <p>Placed by: {{ geocache.cacher.first_name }} {{ geocache.cacher.last_name }}</p>
-=======
-                    {% if not geocache.active and not geocache.declined %}
-                        <a class="btn btn-primary" href="{% url 'checkoff' pk=geocache.pk %}">Approve</a>
-                        <a class="btn btn-warning" href="{% url 'decline' pk=geocache.pk %}">Decline</a>
-                    {% elif geocache.declined %}
-                        <a class="btn btn-primary" href="{% url 'checkoff' pk=geocache.pk %}">Approve</a>
-                        <br/>
-                        <span style="color: red; font-size: 1rem">Declined by {{geocache.admin|title}}</span>
-                    {% elif not geocache.declined %}
-                        <a class="btn btn-warning" href="{% url 'decline' pk=geocache.pk %}">Decline</a>
-                        <br/>
-                        <span style="color: green; font-size: 1rem">Approved by {{geocache.admin|title}}</span>
+                <p>Placed on {{ geocache.cache_date }} by
+                    <a href="{% url 'profile' pk=geocache.cacher.pk %}">{{ geocache.cacher.first_name }} {{ geocache.cacher.last_name }}</a>
+                </p>
+                <p>Description: {{ geocache.description }}</p>
+                {% if has_password %}
+                    {% if geocache.cacher == user %}
+                        <p>Password: {{ geocache.password }}</p>
                     {% endif %}
                 {% endif %}
-            </h1>
-            
-            <div>
 
-            </div>
-            <p>Placed on {{ geocache.cache_date }}
-            <p>Placed by {{ geocache.cacher.first_name }} {{ geocache.cacher.last_name }}</p>
->>>>>>> 1995c0e4ef4cc0787d791a98798b359e739df5d2
-            <p>Description: {{ geocache.description }}</p>
-            {% if geocache.password != "" %}
-            {% if geocache.cacher == user %}
-            <p>Password: {{ geocache.password }}</p>
-            {% endif %}
-            {% endif %}
-            <p>Found {{ geocache.find_count }} times</p>
-<<<<<<< HEAD
-            <div id="hintContainer"></div>
-            <button id="showHintButton" class="btn btn-primary">Show Hint</button>
-
-            <script type="application/json" id="hints-data">{{ hints|json_script:"hints-data" }}</script>
-
-            <script>
-                let currentHintIndex = 0;
-                let hints = JSON.parse(document.getElementById('hints-data').textContent);
-
-                document.getElementById('showHintButton').addEventListener('click', function () {
-                    if (currentHintIndex < hints.length) {
-                        document.getElementById('hintContainer').innerText = hints[currentHintIndex];
-                        currentHintIndex++;
-                    } else {
-                        this.disabled = true;
-                        this.innerText = 'No More Hints';
-                    }
-                });
-            </script>
-
-
-
-
-            {% if not geocache.declined %}
-            <form id="findForm" class="col-12 col-lg-auto mb-3 me-2 ">
-                <input id="findInput" type="search" class="form-control" placeholder="Cache Password"
-                    aria-label="Search">
-            </form>
-            <a class="btn btn-primary" id="reportFindButton" href="#">Report Find</a>
-
-            <script>
-                document.getElementById('findForm').onsubmit = function (event) {
-                    event.preventDefault();
-                    var password = document.getElementById('findInput').value;
-                    var pk = parseInt("{{ geocache.pk }}");
-                    var actionUrl = '/find/' + pk + '/' + encodeURIComponent(password);
-                    window.location.href = actionUrl;
-                };
-
-                document.getElementById('reportFindButton').onclick = function (event) {
-                    event.preventDefault();
-                    var password = document.getElementById('findInput').value;
-                    var pk = parseInt("{{ geocache.pk }}");
-                    var actionUrl = '/find/' + pk + '/' + encodeURIComponent(password);
-                    window.location.href = actionUrl;
-                };
-
-            </script>
-
-            {% endif %}
-
-
-=======
-
-            {% if not geocache.declined %}
-                <a class="btn btn-primary" href="{% url 'find' pk=geocache.pk %}">Log Find</a>
-                <br/>
-            {% endif %}
-            
->>>>>>> 1995c0e4ef4cc0787d791a98798b359e739df5d2
-            <div id="map" style="height: 500px; width: 60%; align-self: center;"></div>
-
-
-            <h2>Finds</h2>
-            <div class="list-group">
-                {% for find in finds %}
-                <a class="list-group-item list-group-item-action">
-                    {{ find.finder.first_name }} {{ find.finder.last_name }} on {{ find.timestamp|date:"N j, Y g:i " }}
-                </a>
-                {% empty %}
-                <p class="list-group-item">No finds yet.</p>
-                {% endfor %}
-            </div>
-
-
-
-
-            <h2>Comments</h2>
-            {% if user_has_find %}
-            <form method="post" class="form-group">
-                {% csrf_token %}
-                {{ form.text.label_tag }} {{ form.text }}
-                <button type="submit">Submit</button>
-            </form>
-            {% endif %}
-
-            <div class="comments-section">
-                {% for comment in comments %}
-                <div class="card mb-3">
-                    <div class="card-header">
-                        Commented by {{ comment.user.first_name }} {{ comment.user.last_name }} on {{ comment.date }}
-                    </div>
-                    <div class="card-body">
-                        <p class="card-text">{{ comment.text }}</p>
-                    </div>
+                <div class="hints">
+                    <button id="showHintButton" class="btn btn-primary">Show Hint</button>
+                    <span class="gray" style="font-style: italic" id="hintContainer"></span>
                 </div>
-                {% empty %}
-                <p>No comments yet.</p>
-                {% endfor %}
+                <script>
+                    let currentHintIndex = 0;
+                    let hints = [{% for hint in hints%} "{{hint}}",{% endfor %}];
+
+                    document.getElementById('showHintButton').addEventListener('click', function () {
+                        console.log("here")
+                        if (currentHintIndex < hints.length) {
+                            document.getElementById('hintContainer').innerText = hints[currentHintIndex];
+                            currentHintIndex++;
+                            this.innerText = 'Show Another Hint';
+                        } else {
+                            this.disabled = true;
+                            this.innerText = 'No More Hints';
+                        }
+                    });
+                </script>
+                <br>
+
+
+                {% if not geocache.declined %}
+                    <div class="loggingContainer">
+                        <button class="btn btn-primary" id="reportFindButton">Log Find</button>
+                        {% if has_password %}
+                            <input id="findInput" type="search" 
+                            style="display: inline; max-width: 14rem; min-width: 0"
+                            class="form-control" placeholder="Cache Password"
+                            aria-label="Search">
+                        {% endif %}
+                    </div>
+                    
+                    <script>
+                        let handleSubmit = function (event) {
+                            event.preventDefault();
+                            let pk = {{ geocache.pk }};
+
+                            let findInput = document.getElementById('findInput');
+                            let password = "";
+                            if (findInput) password = findInput.value;
+
+                            if(password.length > 0) {
+                                window.location.href = '/find/' + pk + '/' + encodeURIComponent(password);
+                            } else {
+                                window.location.href = '/find/' + pk;
+                            }
+                        }
+                        document.getElementById('reportFindButton').onclick = handleSubmit;
+
+                    </script>
+
+                {% endif %}
             </div>
+
+                <div id="map"></div>
+            </div>
+        <div>
+        
+        <h2>Finds ({{geocache.find_count}})</h2>
+        <div class="list-group">
+            {% for find in finds %}
+            <a class="list-group-item list-group-item-action">
+                {{ find.finder.first_name }} {{ find.finder.last_name }} on {{ find.timestamp|date:"N j, Y g:i " }}
+            </a>
+            {% empty %}
+            <p class="list-group-item">No finds yet.</p>
+            {% endfor %}
+        </div>
+
+        <h2>Comments</h2>
+        {% if user_has_find %}
+        <form method="post" class="form-group">
+            {% csrf_token %}
+            {{ form.text.label_tag }} {{ form.text }}
+            <br>
+            <button class="btn btn-primary" type="submit">Submit</button>
+        </form>
+        {% endif %}
+
+        <div class="comments-section">
+            {% for comment in comments %}
+            <div class="card mb-3" >
+                <div style="font-size: 0.75rem; border-radius: 0.25rem;" class="card-header">
+                    Commented by <a href="{%url 'profile' pk=user.pk%}">{{ comment.user.first_name }} {{ comment.user.last_name }}</a> on {{ comment.date }}
+                </div>
+                <div class="card-body">
+                    <p class="card-text">{{ comment.text }}</p>
+                </div>
+            </div>
+            {% empty %}
+            <p>No comments yet.</p>
+            {% endfor %}
+        </div>
 
         </div>
     </div>

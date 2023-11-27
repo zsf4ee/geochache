@@ -6,7 +6,7 @@
 <form method="post" class="form-group">
     {% csrf_token %}
     {{ form.text.label_tag }} {{ form.text }}
-    <button type="submit">Decline</button>
+    <button class="btn btn-primary" type="submit">Decline</button>
 </form>
 
 

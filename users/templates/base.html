@@ -21,7 +21,7 @@
 
     <a class="btn btn-outline-success navbar-brand" href="{% url 'catalog' %}">Browse</a>
     <a class="btn btn-outline-success navbar-brand " href="{% url 'add' %}">Create</a>
-    <a class="btn btn-outline-success navbar-brand" href="{% url 'leaderboard' top=1 %}">Leaderboard</a>
+    <a class="btn btn-outline-success navbar-brand" href="{% url 'leaderboard'%}">Leaderboard</a>
     <a class="btn btn-outline-success navbar-brand" href="{% url 'pending' %}">Pending</a>
     {% if user.is_admin %}
         <a class="btn btn-outline-success navbar-brand" href="{% url 'approve' %}">Approve</a>
