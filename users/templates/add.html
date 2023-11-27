@@ -123,13 +123,13 @@
         <form method="post" class="form-group">
             {% csrf_token %}
             {{ form.name.label_tag }} {{ form.name }}
-            <br>
+
             {{ form.description.label_tag }} {{ form.description }}
-            <br>
+
             {{ form.hint.label_tag }} {{ form.hint }}
-            <br>
+
             {{ form.password.label_tag }} {{ form.password }}
-            <br>
+
             {{ form.location }}
             
             {{ form.radius.label_tag }} {{ form.radius }}

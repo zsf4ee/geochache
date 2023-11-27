@@ -68,7 +68,7 @@ footer {
 
 .card * {
     text-decoration: none;
-    color: inherit;
+    color:inherit;
 }
 
 .card:hover {
@@ -79,7 +79,14 @@ footer {
 
 a {
     transition: font 0.5s;
+    text-decoration: none;
+    color: green;
 }
+
+a:hover {
+    color: green;
+}
+
 .card a:hover {
     font-size: 105%;
     transition: font 0.5s;
