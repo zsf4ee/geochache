@@ -67,23 +67,6 @@
         margin-top: 20px;
     }
 
-    .card {
-        margin-bottom: 10px;
-        border: 1px solid #513523;
-    }
-
-    .card-header {
-        background-color: #7f5539;
-        font-weight: bold;
-    }
-
-    .card-body {
-        background-color: #ffffff;
-    }
-
-    .card-text {
-        color: #333;
-    }
 
     .messages {
         margin: 10px 0;
@@ -267,9 +250,9 @@
 
         <div class="comments-section">
             {% for comment in comments %}
-            <div class="card mb-3">
-                <div class="card-header">
-                    Commented by {{ comment.user.first_name }} {{ comment.user.last_name }} on {{ comment.date }}
+            <div class="card mb-3" >
+                <div style="font-size: 0.75rem; border-radius: 0.25rem;" class="card-header">
+                    Commented by <a href="{%url 'profile' pk=user.pk%}">{{ comment.user.first_name }} {{ comment.user.last_name }}</a> on {{ comment.date }}
                 </div>
                 <div class="card-body">
                     <p class="card-text">{{ comment.text }}</p>
