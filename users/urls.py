@@ -16,6 +16,6 @@ urlpatterns = [
     path("find/<int:pk>", views.find_without_password, name="find"),
     path("search/<str:role>/<str:text>", views.search, name="search"),
     path("pending", views.pending, name="pending"),
-    path("leaderboard/<int:top>",views.leaderboard,name="leaderboard"),
+    path("leaderboard",views.leaderboard,name="leaderboard"),
     path("profile/<int:pk>",views.profile,name="profile")
 ]

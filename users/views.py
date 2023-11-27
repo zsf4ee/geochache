@@ -268,8 +268,8 @@ def pending(request):
 
 
 @login_required
-def leaderboard(request, top):
-    users = User.objects.filter().order_by("-find_count")[:top]
+def leaderboard(request):
+    users = User.objects.filter().order_by("-find_count")
     return render(request, "leaderboard.html", {"users": users})
 
 
