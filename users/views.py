@@ -6,6 +6,7 @@ from django.contrib.auth import logout
 from django.urls import reverse
 from django.utils import timezone
 from django.db.models import Q
+from django.contrib import messages
 
 
 from .models import *
@@ -23,10 +24,12 @@ def welcome(request):
 def login_view(request):
     return render(request, "login.html")
 
+
 @login_required
 def logout_view(request):
     logout(request)
     return render(request, "welcome.html")
+
 
 @login_required
 def geocache_add(request):
@@ -46,10 +49,10 @@ def geocache_add(request):
                 radius=form.cleaned_data["radius"],
             )
             geocache.save()
-            
+
             # TODO: Create hint here
-            
-            return redirect("catalog")
+
+            return redirect("hint/" + str(geocache.pk))
         else:
             print(form.errors)
 
@@ -58,9 +61,41 @@ def geocache_add(request):
 
     return render(request, "add.html", {"form": form})
 
+
+@login_required
+def hint(request, pk):
+    geocache = get_object_or_404(Geocache, pk=pk)
+    if request.method == "POST":
+        form = HintForm(request.POST)
+        if form.is_valid():
+            # Save the question
+            hint = Hint(
+                text=form.cleaned_data["text"],
+                geocache=geocache,
+                number=Hint.objects.filter(geocache=geocache).count() + 1,
+            )
+            hint.save()
+
+            if Hint.objects.filter(geocache=geocache).count() == 4:
+                cache_url = reverse("cache") + f"?lat={geocache.lat}&lng={geocache.lng}"
+                return HttpResponseRedirect(cache_url)
+            return HttpResponseRedirect(reverse("hint", args=[geocache.pk]))
+        else:
+            print(form.errors)
+
+    else:
+        form = HintForm()
+    hints = Hint.objects.filter(geocache=geocache)
+
+    return render(
+        request, "hint.html", {"form": form, "hints": hints, "geocache": geocache}
+    )
+
+
 @login_required
 def catalog(request):
     return render(request, "catalog.html")
+
 
 @login_required
 def geocaches_within_bounds(request):
@@ -77,6 +112,7 @@ def geocaches_within_bounds(request):
         return JsonResponse(list(geocaches), safe=False)
     else:
         return HttpResponseNotFound("No geocaches found.")
+
 
 @login_required
 def cache(request):
@@ -103,25 +139,29 @@ def cache(request):
 
     finds = Find.objects.filter(geocache=geocache).order_by("-timestamp")
     comments = Comment.objects.filter(geocache=geocache).order_by("-date")
+    hints = [hint.text for hint in Hint.objects.filter(geocache=geocache)]
+    print(hints)
     user_has_find = any(request.user == find.finder for find in finds)
-
     context = {
         "geocache": geocache,
         "finds": finds,
         "comments": comments,
         "user_has_find": user_has_find,
         "form": form,
+        "hints": hints,
     }
 
     return render(request, "cache.html", context)
+
 
 @login_required
 def approve(request):
     if not request.user.is_authenticated:
         return redirect("catalog")
-    else: 
+    else:
         geocaches = Geocache.objects.filter(active=False)
         return render(request, "approve.html", {"geocaches": geocaches})
+
 
 @login_required
 def search(request, text, role):
@@ -140,6 +180,7 @@ def search(request, text, role):
         )
     return render(request, "search.html", {"geocaches": geocaches})
 
+
 @login_required
 def checkoff(request, pk):
     geocache = get_object_or_404(Geocache, pk=pk)
@@ -151,6 +192,7 @@ def checkoff(request, pk):
     geocache.save()
     cache_url = reverse("cache") + f"?lat={geocache.lat}&lng={geocache.lng}"
     return HttpResponseRedirect(cache_url)
+
 
 @login_required
 def decline(request, pk):
@@ -170,20 +212,25 @@ def decline(request, pk):
     return render(request, "decline.html", {"geocache": geocache, "form": form})
 
 
-def find(request, pk):
+def find(request, pk, text):
     geocache = get_object_or_404(Geocache, pk=pk)
-    find = Find(
-        finder=request.user,
-        geocache=geocache,
-        timestamp=timezone.localtime(timezone.now()),
-    )
-    find.save()
-    request.user.find_count += 1
-    request.user.save()
-    geocache.find_count += 1
-    geocache.save()
+    if text == geocache.password:
+        find = Find(
+            finder=request.user,
+            geocache=geocache,
+            timestamp=timezone.localtime(timezone.now()),
+        )
+        find.save()
+        request.user.find_count += 1
+        request.user.save()
+        geocache.find_count += 1
+        geocache.save()
+        messages.success(request, "Find Registered!!")
+    else:
+        messages.error(request, "Password does not match. Please try again.")
     cache_url = reverse("cache") + f"?lat={geocache.lat}&lng={geocache.lng}"
     return HttpResponseRedirect(cache_url)
+
 
 @login_required
 def pending(request):
@@ -193,14 +240,15 @@ def pending(request):
     )
     return render(request, "pending.html", {"geocaches": geocaches})
 
+
 @login_required
 def leaderboard(request, top):
     users = User.objects.filter().order_by("-find_count")[:top]
     return render(request, "leaderboard.html", {"users": users})
+
 
 @login_required
 def profile(request, pk):
     profile = get_object_or_404(User, pk=pk)
     geocaches = Geocache.objects.filter(active=True, cacher=profile)
     return render(request, "profile.html", {"profile": profile, "geocaches": geocaches})
-

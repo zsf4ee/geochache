@@ -37,6 +37,7 @@ class Find(models.Model):
     geocache = models.ForeignKey(Geocache, on_delete= models.CASCADE)
     timestamp = models.DateTimeField()
     hint_count = models.IntegerField(default =0)
+    found = models.BooleanField(default=False)
 
     def __str__(self):
         return self.finder.first_name + " " + self.finder.last_name +  " : " + self.geocache + " : " + str(self.timestamp)
@@ -51,4 +52,5 @@ class Comment(models.Model):
 class Hint(models.Model):
     geocache = models.ForeignKey(Geocache, on_delete= models.CASCADE,null=False, related_name="hints")
     text = models.CharField(max_length=150, null=False, blank=False)
+    number = models.IntegerField(default=1,null=False)
 

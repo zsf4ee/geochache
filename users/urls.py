@@ -6,6 +6,7 @@ urlpatterns = [
     path("logout", views.logout_view, name="logout"),
     path("login", views.login_view, name="login"),
     path("add", views.geocache_add, name="add"),
+    path("hint/<int:pk>",views.hint, name="hint"),
     path("catalog", views.catalog, name="catalog"),
     path("bounds", views.geocaches_within_bounds, name="bounds"),
     path("cache", views.cache, name="cache"),
