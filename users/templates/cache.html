@@ -167,7 +167,6 @@
                     {% endif %}
                 {% endif %}
 
-                <p>Found {{ geocache.find_count }} times</p>
                 <div class="hints">
                     <button id="showHintButton" class="btn btn-primary">Show Hint</button>
                     <span class="gray" style="font-style: italic" id="hintContainer"></span>
@@ -181,6 +180,7 @@
                         if (currentHintIndex < hints.length) {
                             document.getElementById('hintContainer').innerText = hints[currentHintIndex];
                             currentHintIndex++;
+                            this.innerText = 'Show Another Hint';
                         } else {
                             this.disabled = true;
                             this.innerText = 'No More Hints';
@@ -227,7 +227,7 @@
             </div>
         <div>
         
-        <h2>Finds</h2>
+        <h2>Finds ({{geocache.find_count}})</h2>
         <div class="list-group">
             {% for find in finds %}
             <a class="list-group-item list-group-item-action">
