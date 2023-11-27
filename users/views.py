@@ -251,4 +251,10 @@ def leaderboard(request, top):
 def profile(request, pk):
     profile = get_object_or_404(User, pk=pk)
     geocaches = Geocache.objects.filter(active=True, cacher=profile)
+<<<<<<< HEAD
     return render(request, "profile.html", {"profile": profile, "geocaches": geocaches})
+=======
+    finds = Find.objects.filter(finder=profile)
+    return render(request, "profile.html", {"profile": profile, "geocaches": geocaches, "finds": finds})
+
+>>>>>>> 1995c0e4ef4cc0787d791a98798b359e739df5d2
