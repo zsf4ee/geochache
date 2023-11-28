@@ -88,10 +88,15 @@
         display: flex;
         justify-content: space-between;
         margin-bottom: 1rem;
+        flex-wrap: nowrap;
     }
 
     .info {
         position: relative;
+        max-width: 32rem;
+        word-break break-all;
+        overflow: hidden;
+        overflow-wrap: break-word;
     }
     .loggingContainer {
         position: absolute;
@@ -149,11 +154,18 @@
                 <script>
                     let currentHintIndex = 0;
                     let hints = [{% for hint in hints%} "{{hint}}",{% endfor %}];
+                    let hintButton = document.getElementById('showHintButton')
+                    let hintText = document.getElementById('hintContainer');
 
-                    document.getElementById('showHintButton').addEventListener('click', function () {
+                    if(hints.length == 0) {
+                        hintButton.remove();
+                        hintText.remove();
+                    }
+                    
+                    hintButton.addEventListener('click', function () {
                         console.log("here")
                         if (currentHintIndex < hints.length) {
-                            document.getElementById('hintContainer').innerText = hints[currentHintIndex];
+                            hintText.innerText = hints[currentHintIndex];
                             currentHintIndex++;
                             this.innerText = 'Show Another Hint';
                         } else {
