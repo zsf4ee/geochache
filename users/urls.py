@@ -17,5 +17,7 @@ urlpatterns = [
     path("search/<str:role>/<str:text>", views.search, name="search"),
     path("pending", views.pending, name="pending"),
     path("leaderboard",views.leaderboard,name="leaderboard"),
-    path("profile/<int:pk>",views.profile,name="profile")
+    path("profile/<int:pk>",views.profile,name="profile"),
+    path("confdelete/<int:pk>",views.confirm_delete,name="confdelete"),
+    path("delete/<int:pk>",views.delete,name="delete")
 ]

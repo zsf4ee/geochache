@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+
+{% block title %}Delete Cache{% endblock %}
+
+{% block content %}
+    <h3>Do you really want to delete this cache?<h3>
+    <a class="btn btn-danger" type="submit" href={%url 'delete' pk=pk%}>Yes, delete it</a>
+    <a class="btn btn-secondary" type="submit" href="{% url 'cache' %}?lat={{lat}}&lng={{lng}}">No, don't delete it</a>
+{% endblock %}
