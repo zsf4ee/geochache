@@ -67,27 +67,6 @@
         margin-top: 20px;
     }
 
-
-    .messages {
-        margin: 10px 0;
-        padding: 10px;
-        border: 1px solid transparent;
-        border-radius: 4px;
-    }
-
-    .messages .error {
-        background-color: #f2dede;
-        border-color: #ebccd1;
-        color: #a94442;
-    }
-
-    .messages .success {
-        background-color: #dff0d8;
-        border-color: #d6e9c6;
-        color: #3c763d;
-    }
-
-
     #findForm {
         display: inline;
         width: 16rem;
@@ -109,10 +88,15 @@
         display: flex;
         justify-content: space-between;
         margin-bottom: 1rem;
+        flex-wrap: nowrap;
     }
 
     .info {
         position: relative;
+        max-width: 32rem;
+        word-break break-all;
+        overflow: hidden;
+        overflow-wrap: break-word;
     }
     .loggingContainer {
         position: absolute;
@@ -129,17 +113,13 @@
 
 <body onload="initMap()">
     <div>
-        {% if messages %}
-        <ul class="messages">
-            {% for message in messages %}
-            <li style="list-style-type: none;" {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
-            {% endfor %}
-        </ul>
-        {% endif %}
         <div class="split">
             <div class="info">
                 <h1>
                     {{ geocache.name|title }}
+                    {% if user.is_admin or user == geoache.cacher%}
+                        <a class="btn btn-danger" href="{% url 'confdelete' pk=geocache.pk %}">Delete</a>
+                    {%endif%}
                     {% if user.is_admin %}
                         {% if not geocache.active and not geocache.declined %}
                             <a class="btn btn-primary" href="{% url 'checkoff' pk=geocache.pk %}">Approve</a>
@@ -174,11 +154,18 @@
                 <script>
                     let currentHintIndex = 0;
                     let hints = [{% for hint in hints%} "{{hint}}",{% endfor %}];
+                    let hintButton = document.getElementById('showHintButton')
+                    let hintText = document.getElementById('hintContainer');
 
-                    document.getElementById('showHintButton').addEventListener('click', function () {
+                    if(hints.length == 0) {
+                        hintButton.remove();
+                        hintText.remove();
+                    }
+                    
+                    hintButton.addEventListener('click', function () {
                         console.log("here")
                         if (currentHintIndex < hints.length) {
-                            document.getElementById('hintContainer').innerText = hints[currentHintIndex];
+                            hintText.innerText = hints[currentHintIndex];
                             currentHintIndex++;
                             this.innerText = 'Show Another Hint';
                         } else {

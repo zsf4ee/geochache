@@ -162,6 +162,7 @@ def cache(request):
 @login_required
 def approve(request):
     if not request.user.is_authenticated:
+        messages.error(request, "You do not have the permission to approve caches.")
         return redirect("catalog")
     else:
         geocaches = Geocache.objects.filter(active=False)
@@ -230,9 +231,9 @@ def find_with_password(request, pk, text):
         request.user.save()
         geocache.find_count += 1
         geocache.save()
-        messages.success(request, "Find Registered!!")
+        messages.success(request, "Find logged!")
     else:
-        messages.error(request, "Password does not match. Please try again.")
+        messages.error(request, "The password does not match. Please try again.")
     cache_url = reverse("cache") + f"?lat={geocache.lat}&lng={geocache.lng}"
     return HttpResponseRedirect(cache_url)
 
@@ -279,4 +280,26 @@ def profile(request, pk):
     geocaches = Geocache.objects.filter(active=True, cacher=profile)
     finds = Find.objects.filter(finder=profile)
     return render(request, "profile.html", {"profile": profile, "geocaches": geocaches, "finds": finds})
+
+
+@login_required
+def confirm_delete(request, pk):
+    geocache = Geocache.objects.filter(pk=pk).first()
+    return render(request, "confirm_delete.html", {"pk": pk, "lat": geocache.lat, "lng": geocache.lng})
+
+@login_required
+def delete(request, pk):
+    geocache = Geocache.objects.filter(pk=pk).first()
+    
+    if request.user == geocache.cacher or request.user.is_admin:
+        geocache.delete()
+        messages.success(request, "Cache deleted.")
+        return redirect("catalog")
+    else: 
+        cache_url = reverse("cache") + f"?lat={geocache.lat}&lng={geocache.lng}"
+        messages.error(request, "You do not have the permission to delete that cache.")
+        return HttpResponseRedirect(cache_url)
+
+
+
 
