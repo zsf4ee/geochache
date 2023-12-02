@@ -240,7 +240,8 @@ class FindEdgeCaseTests(TestCase):
         with self.assertRaises(IntegrityError):
             Find.objects.create(finder=self.user, geocache=self.geocache)
 
-'''class UserFindCountEdgeCaseTests(TestCase):
+#failing from here
+class UserFindCountEdgeCaseTests(TestCase):
 
     def setUp(self):
         self.user = User.objects.create(username='test.findcount@gmail.com', password='password')
@@ -260,9 +261,9 @@ class FindEdgeCaseTests(TestCase):
         find = Find.objects.create(finder=self.user, geocache=self.geocache)
         initial_count = self.user.find_count
         find.delete()
-        self.assertEqual(User.objects.get(id=self.user.id).find_count, initial_count - 1)'''
+        self.assertEqual(User.objects.get(id=self.user.id).find_count, initial_count - 1)
 
-'''class GeocacheActiveDeclineEdgeCaseTests(TestCase):
+class GeocacheActiveDeclineEdgeCaseTests(TestCase):
 
     def setUp(self):
         self.user = User.objects.create(username='test.geocache@gmail.com', password='password')
