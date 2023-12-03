@@ -1,11 +1,12 @@
 import os
 from django.core.exceptions import ValidationError
-from django.db import IntegrityError
 from django.test import TestCase
 from .models import User, Geocache, Find, Comment
 from django.utils import timezone
 from datetime import timedelta
 from decimal import Decimal
+from django.contrib.auth import authenticate, login, logout
+
 
 # Ensure Django settings are configured
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'mysite.settings')
@@ -23,6 +24,24 @@ class UserTestCase(TestCase):
         self.assertIsInstance(self.admin_user, User)
         self.assertTrue(self.admin_user.is_admin)
 
+class AuthenticationViewsTests(TestCase):
+    def setUp(self):
+        self.user = User.objects.create_user(username='testuser', password='testpassword')
+        self.client.login(username='testuser', password='testpassword')
+
+    def test_login_success(self):
+        user = authenticate(username='testuser', password='testpassword')
+        self.assertIsNotNone(user)
+        self.assertTrue(user.is_authenticated)
+
+    def test_login_failure(self):
+        user = authenticate(username='testuser', password='wrongpassword')
+        self.assertIsNone(user)
+
+    def test_logout(self):
+        logout(self.client)
+        self.assertFalse('_auth_user_id' in self.client.session)
+
 class GeocacheTestCase(TestCase):
     def setUp(self):
         self.user = User.objects.create(username='test.user@gmail.com', password='test_password', is_admin=False)
@@ -38,6 +57,50 @@ class GeocacheTestCase(TestCase):
         self.assertIsInstance(self.geocache, Geocache)
         self.assertEqual(self.geocache.cacher, self.user)
         self.assertFalse(self.geocache.active)
+
+class GeocacheCreationTestCase(TestCase):
+    def setUp(self):
+        self.user = User.objects.create_user(username='geocacheuser', password='geocachepassword')
+
+    def test_geocache_creation(self):
+        geocache = Geocache.objects.create(
+            name='New Geocache',
+            cacher=self.user,
+            cache_date=timezone.now(),
+            lat=10.0,
+            lng=10.0,
+            description='A new geocache'
+        )
+        self.assertEqual(Geocache.objects.count(), 1)
+        self.assertEqual(geocache.name, 'New Geocache')
+
+class GeocacheUpdateTestCase(TestCase):
+    def setUp(self):
+        self.user = User.objects.create_user(username='geocacheuser', password='geocachepassword')
+        self.geocache = Geocache.objects.create(
+            name='Update Geocache',
+            cacher=self.user,
+            cache_date=timezone.now(),
+            lat=10.0,
+            lng=10.0,
+            description='An updatable geocache'
+        )
+
+    def test_geocache_update(self):
+        self.geocache.name = 'Updated Geocache Name'
+        self.geocache.save()
+        updated_geocache = Geocache.objects.get(id=self.geocache.id)
+        self.assertEqual(updated_geocache.name, 'Updated Geocache Name')
+
+class UserProfileUpdateTestCase(TestCase):
+    def setUp(self):
+        self.user = User.objects.create_user(username='profileuser', password='profilepassword')
+
+    def test_profile_update(self):
+        self.user.username = 'updatedusername'
+        self.user.save()
+        updated_user = User.objects.get(id=self.user.id)
+        self.assertEqual(updated_user.username, 'updatedusername')
 
 class FindTestCase(TestCase):
     def setUp(self):
@@ -194,6 +257,17 @@ class GeocacheDeclineTestCase(TestCase):
         updated_geocache = Geocache.objects.get(id=self.geocache.id)
         self.assertTrue(updated_geocache.declined)
         self.assertEqual(updated_geocache.reason, "Inappropriate location")
+
+class UserProfileUpdateTestCase(TestCase):
+    def setUp(self):
+        self.user = User.objects.create_user(username='profileuser', password='profilepassword')
+
+    def test_profile_update(self):
+        self.user.username = 'updatedusername'
+        self.user.save()
+        updated_user = User.objects.get(id=self.user.id)
+        self.assertEqual(updated_user.username, 'updatedusername')
+
 
 class UserEdgeCaseTests(TestCase):
     def test_user_with_long_username_password(self):
