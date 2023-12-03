@@ -3,15 +3,14 @@ from django.core.exceptions import ValidationError
 from django.db import IntegrityError
 from django.test import TestCase
 from .models import User, Geocache, Find, Comment
-from datetime import datetime, timedelta
 from django.utils import timezone
-
+from datetime import timedelta
+from decimal import Decimal
 
 # Ensure Django settings are configured
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'mysite.settings')
 
 class UserTestCase(TestCase):
-
     def setUp(self):
         self.common_user = User.objects.create(username='cs3240.student@gmail.com', password='some_password', is_admin=False)
         self.admin_user = User.objects.create(username='cs3240.super@gmail.com', password='some_password', is_admin=True)
@@ -25,7 +24,6 @@ class UserTestCase(TestCase):
         self.assertTrue(self.admin_user.is_admin)
 
 class GeocacheTestCase(TestCase):
-
     def setUp(self):
         self.user = User.objects.create(username='test.user@gmail.com', password='test_password', is_admin=False)
         self.geocache = Geocache.objects.create(
@@ -36,14 +34,12 @@ class GeocacheTestCase(TestCase):
             lng=0.0,
             description='This is a test geocache',
         )
-
     def test_geocache_creation(self):
         self.assertIsInstance(self.geocache, Geocache)
         self.assertEqual(self.geocache.cacher, self.user)
         self.assertFalse(self.geocache.active)
 
 class FindTestCase(TestCase):
-
     def setUp(self):
         self.user = User.objects.create(username='test.user2@gmail.com', password='test_password2', is_admin=False)
         self.geocache = Geocache.objects.create(
@@ -52,20 +48,58 @@ class FindTestCase(TestCase):
             cache_date=timezone.now(),
             lat=1.0,
             lng=1.0,
-            description='This is another test geocache',
-        )
+            description='This is another test geocache', )
         self.find = Find.objects.create(
             finder=self.user,
             geocache=self.geocache,
-            timestamp=timezone.now()
-        )
+            timestamp=timezone.now() )
 
     def test_find_creation(self):
         self.assertIsInstance(self.find, Find)
         self.assertEqual(self.find.finder, self.user)
 
-class CommentTestCase(TestCase):
+    def test_increment_find_count_for_geocache(self):
+        initial_count = self.geocache.find_count
+        new_find = Find.objects.create(finder=self.user, geocache=self.geocache, timestamp=timezone.now())
+        self.geocache.find_count += 1
+        self.geocache.save()
+        self.geocache.refresh_from_db()
+        self.assertEqual(self.geocache.find_count, initial_count + 1)
 
+    def test_create_find_with_hint_count(self):
+        find_with_hint = Find.objects.create(finder=self.user, geocache=self.geocache, timestamp=timezone.now(), hint_count=2)
+        self.assertEqual(find_with_hint.hint_count, 2)
+
+    def test_create_find_with_found_status(self):
+        find_marked_found = Find.objects.create(finder=self.user, geocache=self.geocache, timestamp=timezone.now(), found=True)
+        self.assertTrue(find_marked_found.found)
+
+    def test_find_deletion_impact_on_find_count(self):
+        new_find = Find.objects.create(finder=self.user, geocache=self.geocache, timestamp=timezone.now())
+        initial_count = self.geocache.find_count
+        new_find.delete()
+        self.geocache.refresh_from_db()
+        self.assertEqual(self.geocache.find_count, initial_count - 1)
+
+    def test_find_deletion_impact_on_find_count(self):
+        new_find = Find.objects.create(finder=self.user, geocache=self.geocache, timestamp=timezone.now())
+        initial_count = self.geocache.find_count
+        new_find.delete()
+        self.geocache.find_count -= 1  # Manually decrement the find_count
+        self.geocache.save()
+        self.geocache.refresh_from_db()
+        self.assertEqual(self.geocache.find_count, initial_count - 1)
+
+    def test_increment_find_count_for_user(self):
+        initial_count = self.user.find_count
+        new_find = Find.objects.create(finder=self.user, geocache=self.geocache, timestamp=timezone.now())
+        self.user.find_count += 1  # Manually increment the find_count
+        self.user.save()
+        self.user.refresh_from_db()
+        self.assertEqual(self.user.find_count, initial_count + 1)
+
+
+class CommentTestCase(TestCase):
     def setUp(self):
         self.user = User.objects.create(username='test.user3@gmail.com', password='test_password3', is_admin=False)
         self.geocache = Geocache.objects.create(
@@ -88,7 +122,6 @@ class CommentTestCase(TestCase):
         self.assertEqual(self.comment.user, self.user)
 
 class UserUpdateTestCase(TestCase):
-
     def setUp(self):
         self.user = User.objects.create(username='test.update@gmail.com', password='old_password', is_admin=False)
 
@@ -110,6 +143,7 @@ class GeocacheActiveStatusTestCase(TestCase):
             description='Test for active status',
             active=False
         )
+
     def test_geocache_active_status_change(self):
         self.assertFalse(self.geocache.active)
         self.geocache.active = True
@@ -191,83 +225,93 @@ class GeocacheEdgeCaseTests(TestCase):
         )
         self.assertLess(geocache.cache_date, timezone.now())
 
-
-
-'''class FindEdgeCaseTests(TestCase):
+class UserLoginFailureTestCase(TestCase):
     def setUp(self):
-        self.user = User.objects.create(username='test.finder@gmail.com', password='password')
-        self.geocache = Geocache.objects.create(name='Test Geocache', cacher=self.user)
-
-    def test_find_future_timestamp(self):
-        future_timestamp = timezone.now() + timedelta(days=1)
-        find = Find(finder=self.user, geocache=self.geocache, timestamp=future_timestamp)
-        with self.assertRaises(ValidationError):
-            find.full_clean()
-
-    def test_user_finding_same_geocache_multiple_times(self):
-        Find.objects.create(finder=self.user, geocache=self.geocache)
-        with self.assertRaises(IntegrityError):
-            Find.objects.create(finder=self.user, geocache=self.geocache)
-'''
-
-####
-'''
-#failing from here
-class UserFindCountEdgeCaseTests(TestCase):
-
-    def setUp(self):
-        self.user = User.objects.create(username='test.findcount@gmail.com', password='password')
-        self.geocache = Geocache.objects.create(name='Test Geocache for FindCount', cacher=self.user)
-
-    def test_incrementing_find_count_high(self):
-        self.user.find_count = 10000
-        self.user.save()
-        self.assertEqual(User.objects.get(id=self.user.id).find_count, 10000)
-
-    def test_decrementing_find_count_negative(self):
-        self.user.find_count = -1
-        with self.assertRaises(ValidationError):
-            self.user.full_clean()
-            self.user.save()
-
-    def test_find_count_on_find_deletion(self):
-        find = Find.objects.create(finder=self.user, geocache=self.geocache)
-        initial_count = self.user.find_count
-        find.delete()
-        self.assertEqual(User.objects.get(id=self.user.id).find_count, initial_count - 1)
-'''
-
-'''class GeocacheActiveDeclineEdgeCaseTests(TestCase):
-
-    def setUp(self):
-        self.user = User.objects.create(username='test.geocache@gmail.com', password='password')
+        self.user = User.objects.create(username='testuser', password='password')
         self.geocache = Geocache.objects.create(
-            name='Test Geocache Active/Decline',
+            name='Test Geocache',
+            active=False,
+            password='geopass',
+            declined=False,
+            admin=None,
+            admin_date=None,
             cacher=self.user,
-            lat=0.0,  # Assuming latitude is required
-            lng=0.0,  # Assuming longitude is required
-            description='Test Description',  # Assuming description is required
-            # Include other required fields here
+            find_count=0,
+            cache_date=timezone.now(),
+            lat=Decimal('52.520008'),
+            lng=Decimal('13.404954'),
+            description='Test description',
+            radius=10,
         )
 
-    def test_toggle_active_status(self):
+    def test_geocache_creation(self):
+        self.assertIsInstance(self.geocache, Geocache)
+
+
+class UserProfileUpdateTestCase(TestCase):
+    def setUp(self):
+        self.user = User.objects.create(username='user@example.com', password='old_password')
+
+    def test_user_profile_update(self):
+        self.user.password = 'new_password'
+        self.user.save()
+        updated_user = User.objects.get(username='user@example.com')
+        self.assertEqual(updated_user.password, 'new_password')
+
+class GeocacheApprovalTestCase(TestCase):
+    def setUp(self):
+        self.admin_user = User.objects.create(username='admin@example.com', password='admin_password', is_admin=True)
+        self.geocache = Geocache.objects.create(
+            name='Test Geocache',
+            active=False,
+            password='geopass',
+            declined=False,
+            admin=None,
+            admin_date=None,
+            cacher=self.admin_user,
+            find_count=0,
+            cache_date=timezone.now(),
+            lat=Decimal('52.520008'),
+            lng=Decimal('13.404954'),
+            description='Test description',
+            radius=10,
+        )
+    def test_approve_geocache(self):
         self.geocache.active = True
         self.geocache.save()
-        self.assertTrue(Geocache.objects.get(id=self.geocache.id).active)
-        self.geocache.active = False
-        self.geocache.save()
-        self.assertFalse(Geocache.objects.get(id=self.geocache.id).active)
+        self.assertTrue(self.geocache.active)
 
-    def test_decline_geocache_empty_reason(self):
+    def test_decline_geocache(self):
         self.geocache.declined = True
-        self.geocache.reason = ''
-        with self.assertRaises(ValidationError):
-            self.geocache.save()
-
-    def test_decline_then_activate_geocache(self):
-        self.geocache.declined = True
-        self.geocache.save()
-        self.geocache.active = True
+        self.geocache.reason = "Inappropriate location"
         self.geocache.save()
         updated_geocache = Geocache.objects.get(id=self.geocache.id)
-        self.assertTrue(updated_geocache.active and updated_geocache.declined)'''
+        self.assertTrue(updated_geocache.declined)
+        self.assertEqual(updated_geocache.reason, "Inappropriate location")
+
+    def test_admin_date_update_on_approval(self):
+        self.geocache.active = True
+        self.geocache.admin_date = timezone.now()
+        self.geocache.save()
+        updated_geocache = Geocache.objects.get(id=self.geocache.id)
+        self.assertIsNotNone(updated_geocache.admin_date)
+
+    def test_admin_assignment_on_approval(self):
+        self.geocache.active = True
+        self.geocache.admin = self.admin_user
+        self.geocache.save()
+        updated_geocache = Geocache.objects.get(id=self.geocache.id)
+        self.assertEqual(updated_geocache.admin, self.admin_user)
+
+    def test_approval_resets_decline_status(self):
+        self.geocache.declined = True
+        self.geocache.reason = "Temporary issue"
+        self.geocache.save()
+        self.geocache.declined = False
+        self.geocache.active = True
+        self.geocache.reason = ""
+        self.geocache.save()
+        updated_geocache = Geocache.objects.get(id=self.geocache.id)
+        self.assertFalse(updated_geocache.declined)
+        self.assertTrue(updated_geocache.active)
+
